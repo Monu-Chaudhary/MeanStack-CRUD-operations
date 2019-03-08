@@ -1,0 +1,22 @@
+<table class="table table-hover">
+    <!-- <thread> -->
+      <tr>
+        <td>Name</td>
+        <td>Address</td>
+        <td>Phone</td>
+        <td colspan="2">Action</td>
+      </tr>
+    <!-- </thread> -->
+  
+    <tbody>
+      <!-- | paginate: {itemsPerPage: 10, currentPage: p} -->
+      <tr id="tr" *ngFor="let employee of employeeObjects">
+        <td>{{ employee.name}}</td>
+        <td>{{ employee.address}}</td>
+        <td>{{ employee.phone}}</td>
+        <td><a id='update' [routerLink]="['update', employee._id]" class="btn btn-primary">Edit</a></td>
+        <td><a id='delete' (click)="deleteEmployee(employee._id)" class="btn btn-danger">Delete</a></td>
+      </tr>
+      <pagination-controls (pageChange)="p=$event"></pagination-controls>
+    </tbody>
+  </table>
