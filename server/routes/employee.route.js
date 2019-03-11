@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const employeeRoutes = express.Router();
 
+
 //require employee model in our routes model
 let Employee = require('../models/Employee');
 
@@ -43,17 +44,16 @@ employeeRoutes.route('/').get(function (req, res, next) {
     query.limit = size;
     //find some documents
 
+    // app.set('views', __dirname+ 'src/app/read');
+    // app.set('view engine', 'html');
+
+
     Employee.find({}).skip(query.skip).limit(query.limit).exec((err, EmployeeObjects)=>{
         Employee.count().exec(function(err, count){
             if(err) return next(err)
-            // res.json(EmployeeObjects);
-            //console.log(count);
-            res.render('/', {
-                EmployeeObjects: EmployeeObjects,
-                current: page,
-                pages: Math.ceil(count/query.limit),
-                // console.log(pages);
-            })
+            res.json({
+                EmployeeObjects: EmployeeObjects
+        });
         })
     })
 });

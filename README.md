@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Meanstack1
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.3.
@@ -28,3 +29,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 reference Tutorial:
 https://appdividend.com/2018/11/04/angular-7-crud-example-mean-stack-tutorial/
+=======
+# MeanStack CRUD operations
+
+MEAN Stack CRUD operations 
+>>>>>>> c433c4fafc04739abc64583cf683cf602e330e66

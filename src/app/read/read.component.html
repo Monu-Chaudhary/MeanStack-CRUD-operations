@@ -10,7 +10,7 @@
   
     <tbody>
       <!-- | paginate: {itemsPerPage: 10, currentPage: p} -->
-      <tr id="tr" *ngFor="let employee of employeeObjects">
+      <tr id="tr" *ngFor="let employee of employeeObjects | paginate: {itemsPerPage:2 ,currentPage: p, totalItems: res.count}">
         <td>{{ employee.name}}</td>
         <td>{{ employee.address}}</td>
         <td>{{ employee.phone}}</td>

@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class ReadComponent implements OnInit {
 
   employeeObjects: Employee[];
-  //p: number = 1;
+  p: number = 1;
 
   constructor(private ps: PersonService, private router: Router) { 
   }

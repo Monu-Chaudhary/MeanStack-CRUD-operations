@@ -6,12 +6,6 @@ const express = require('express'),
     config = require('./DB'),
     Employee = require('./models/Employee');
 
-    // router.get('/employee',(req, res) => {
-    //     {
-
-    //     })
-    // })
-
     const employeeRoutes = require('./routes/employee.route');
     mongoose.Promise = global.Promise;
     mongoose.connect(config.DB, {useNewUrlParser: true}).then(
