@@ -1,5 +1,6 @@
 export default class Employee {
     name: string;
-    address: string;
-    phone: number;
+    department: string;
+    gender: string;
+    age: number;
 }

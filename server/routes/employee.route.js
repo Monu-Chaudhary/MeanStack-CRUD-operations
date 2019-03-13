@@ -9,7 +9,7 @@ let Employee = require('../models/Employee');
 //defined store route
 employeeRoutes.route('/add').post(function (req, res) {
     let employee = new Employee(req.body);
-    //console.log('abc');
+    // console.log("URL",employee, "\n Request", req.body);
     employee.save()
         .then(employee => {
             res.status(200).json({ 'employee': 'employee is added successfully' });
@@ -22,18 +22,25 @@ employeeRoutes.route('/add').post(function (req, res) {
 
 //defined get data(index or listing) route
 employeeRoutes.route('/').get(function (req, res, next) {
+
+    console.log("HERE");
+    
     if (req.query.page == undefined) {
         req.query.page = 1;
     }
     if (req.query.size == undefined) {
-        req.query.size = 10;
+        req.query.size = 12;
+    }
+    if(req.query.sort == undefined){
+        req.query.sort = '';
     }
 
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
+    var sort = (req.query.sort);
     var query = {};
 
-    // console.log('req.query => ' + JSON.stringify(req.query));
+    console.log(sort);
 
     if (page < 0 || page === 0) {
 
@@ -42,18 +49,20 @@ employeeRoutes.route('/').get(function (req, res, next) {
     }
     query.skip = size * (page - 1);
     query.limit = size;
+    query.sort = sort;
+    
     //find some documents
 
-    // app.set('views', __dirname+ 'src/app/read');
-    // app.set('view engine', 'html');
 
-
-    Employee.find({}).skip(query.skip).limit(query.limit).exec((err, EmployeeObjects)=>{
+    Employee.find({}).skip(query.skip).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
         Employee.count().exec(function(err, count){
             if(err) return next(err)
-            res.json({
-                EmployeeObjects: EmployeeObjects
-        });
+            let data = {
+                count : count,
+                data: EmployeeObjects, 
+                page: page
+            };
+            res.json(data);
         })
     })
 });
@@ -76,8 +85,8 @@ employeeRoutes.route('/update/:id').post(function (req, res) {
         else {
             // console.log("updating");
             employee.name = req.body.name;
-            employee.address = req.body.address;
-            employee.phone = req.body.phone;
+            employee.department = req.body.department;
+            employee.age = req.body.age;
 
             employee.save().then(employee => {
                 res.json('Update complete');

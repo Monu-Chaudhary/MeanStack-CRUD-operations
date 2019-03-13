@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-// import { promise } from 'protractor';
-// import { resolve } from 'dns';
-// import { reject } from 'q';
-import {Observable} from 'rxjs';
-import { promise } from 'protractor';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +10,14 @@ export class PersonService {
 
   constructor(private http: HttpClient) { }
 
-  addPerson(name, address, phone) {
+  addPerson(name, department, gender, age) {
     const obj = {
       name: name,
-      address: address,
-      phone: phone
+      department: department,
+      gender: gender,
+      age: age
     };
-    //console.log(obj);
+    console.log("service",obj);
     //this.http.post(`${this.uri}/add`, obj).subscribe(res => console.log('Done'));
 
     let promise = new Promise((resolve, reject) => {
@@ -30,30 +26,50 @@ export class PersonService {
         .toPromise()
         .then(
           res => { // Success
-          console.log('ADDED');
-          resolve(res);
+            console.log('ADDED');
+            resolve(res);
           },
           msg => { // Error
-          reject(msg);
+            reject(msg);
           }
         );
     });
     return promise;
   }
 
-  getEmployees() {
+  // //to convert the parameters of type other than string to httpParams type.
+  // private getHttpParams(params: any): HttpParams { 
+  //   let _httpParams = new HttpParams(); 
+  //   if (params) { for (let prop in params) 
+  //     { if (params.hasOwnProperty(prop)) 
+  //       { let val = params[prop].toString(); 
+  //         _httpParams = _httpParams.append(prop, val); 
+  //       } } } return _httpParams; }
+
+
+  getEmployees(page: number, sort: string) {
+
+    console.log("HI");
 
     let promise = new Promise((resolve, reject) => {
       let apiURL = `${this.uri}`;
-      this.http.get(apiURL)
+      // let pg = this.getHttpParams(page);
+      let pg = page;
+      this.http.get(apiURL, { params: new HttpParams({
+        fromObject: { 
+          page: pg.toString(),
+          sort: sort  
+        }
+        })
+     })
         .toPromise()
         .then(
           res => { // Success
 
-          resolve(res);
+            resolve(res);
           },
           msg => { // Error
-          reject(msg);
+            reject(msg);
           }
         );
     });
@@ -62,7 +78,7 @@ export class PersonService {
 
   }
 
-  editEmployee(id){
+  editEmployee(id) {
     //console.log("HERE");
     let promise = new Promise((resolve, reject) => {
       let apiURL = `${this.uri}/edit/${id}`;
@@ -71,10 +87,10 @@ export class PersonService {
         .then(
           res => { // Success
 
-          resolve(res);
+            resolve(res);
           },
           msg => { // Error
-          reject(msg);
+            reject(msg);
           }
         );
     });
@@ -82,14 +98,15 @@ export class PersonService {
 
   }
 
-  
 
-  updateEmployee(name, address, phone, id) {
+
+  updateEmployee(name, department, gender, age, id) {
     console.log("updateEmployee");
     const obj = {
       name: name,
-      address: address,
-      phone: phone
+      department: department,
+      gender: gender,
+      age: age
     };
     // console.log(obj);
     // this.http.post(`${this.uri}/update/${id}`, obj).subscribe(res => console.log('Updated'));
@@ -100,18 +117,18 @@ export class PersonService {
         .toPromise()
         .then(
           res => { // Success
-          console.log('Updated');
-          resolve(res);
+            console.log('Updated');
+            resolve(res);
           },
           msg => { // Error
-          reject(msg);
+            reject(msg);
           }
         );
     });
     return promise;
   }
 
-  deleteEmployee(id){
+  deleteEmployee(id) {
     //console.log('hello');
 
     let promise = new Promise((resolve, reject) => {
@@ -121,10 +138,10 @@ export class PersonService {
         .then(
           res => { // Success
 
-          resolve(res);
+            resolve(res);
           },
           msg => { // Error
-          reject(msg);
+            reject(msg);
           }
         );
     });

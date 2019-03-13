@@ -24,14 +24,15 @@ export class UpdateComponent implements OnInit {
   createForm() {
     this.exampleForm = this.fb.group({
       name: ['', Validators.required],
-      address: ['', Validators.required],
-      phone: ['', Validators.required]
+      department: ['', Validators.required],
+      gender: ['', Validators.required],
+      age: ['', Validators.required]
     });
   }
 
-  updateEmployee(name, address, phone) {
+  updateEmployee(name, department, gender, age) {
     this.route.params.subscribe(params => {
-      this.ps.updateEmployee(name, address, phone, params['id']);
+      this.ps.updateEmployee(name, department,gender, age, params['id']);
       this.router.navigate(['employee']);
     });
   }

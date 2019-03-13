@@ -18,13 +18,14 @@ export class CreateComponent implements OnInit {
    createForm(){
      this.exampleForm = this.fb.group({
        name: ['', Validators.required],
-       address: ['', Validators.required],
-       phone: ['', Validators.required]
+       department: ['', Validators.required],
+       gender: ['', Validators.required],
+       age: ['', Validators.required]
      });
    }
 
-   addPerson(name, address, phone){
-     this.ps.addPerson(name, address, phone);
+   addPerson(name, department, gender, age){
+     this.ps.addPerson(name, department, gender, age);
      //location.reload();
      this.router.navigate(['employee']);
    }
