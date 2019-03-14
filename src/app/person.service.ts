@@ -47,9 +47,9 @@ export class PersonService {
   //       } } } return _httpParams; }
 
 
-  getEmployees(page: number, sort: string) {
+  getEmployees(page: number, sort?: string, filter?: string) {
 
-    console.log("HI");
+    // console.log("FILTER", filter);
 
     let promise = new Promise((resolve, reject) => {
       let apiURL = `${this.uri}`;
@@ -58,7 +58,8 @@ export class PersonService {
       this.http.get(apiURL, { params: new HttpParams({
         fromObject: { 
           page: pg.toString(),
-          sort: sort  
+          sort: sort,
+          filter: filter  
         }
         })
      })

@@ -1,17 +1,20 @@
-<!-- 
-
-<label class="control">Filter items
-  <input type="text" class="input" placeholder="filter" #filter>
-</label> -->
 <form [formGroup]="filterForm" novalidate>
-    <div class="form-group">
-      <label class="col-md-4">Sorting</label>
-      <input type="text" class="form-control" formControlName="sort" #sort (keyup.enter)="sortData(sort.value)">
-    </div>
-    <div class="form-group">
-      <label class="cold-md-4">filter</label>
-      <input type="text" class="form-control" formControlName="filter" #filter>
-    </div>
+  <select formControlName="sort" #sort (change)="sortData($event.target.value)">
+    <option value="name" > Name</option>
+    <option value="department" > Department</option>
+    <option value="age" > Age</option>
+
+  </select>
+
+  <!-- <div class="form-group">
+    <label class="col-md-4">Sorting</label>
+    <input type="text" class="form-control" formControlName="sort" #sort (keyup.enter)="sortData(sort.value)">
+  </div> -->
+
+  <div class="form-group">
+    <label class="cold-md-4">filter by Name</label>
+    <input type="text" class="form-control" formControlName="filter" #filter (input)="sortData(sort.value, filter.value)">
+  </div>
 </form>
 
 <table class="table table-hover">
@@ -37,7 +40,8 @@
       <td><a id='update' [routerLink]="['update', employee._id]" class="btn btn-primary">Edit</a></td>
       <td><a id='delete' (click)="deleteEmployee(employee._id)" class="btn btn-danger">Delete</a></td>
     </tr>
-    <pagination-controls (pageChange)="getPage($event, sort.value)" screenReaderPageLabel="page" id="demoProject">
+    <pagination-controls (pageChange)="getPage($event, sort.value, filter.value)" screenReaderPageLabel="page"
+      id="demoProject">
     </pagination-controls>
   </tbody>
 </table>

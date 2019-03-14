@@ -19,23 +19,25 @@ export class ReadComponent implements OnInit {
   page: number = 1;
   count: number = 0;
   loading: boolean;
+  employeeProperties: Employee;
   // sort: string='';
 
   filterForm: FormGroup;
 
   ngOnInit() {
-    this.getPage(1,'');
+    this.getPage(1);
   }
 
-  sortData(sort: string){
-    // console.log("SORT:",sort, '\n PAGE', this.page);
-    this.getPage(this.page, sort);
+  sortData(sort: string, filter?: string){
+    console.log("ok SORT:",sort, '\n Filter', filter);
+    this.getPage(this.page, sort, filter);
   }
-  getPage(page: number, sort: string) {
+
+  getPage(page: number, sort?: string, filter?: string) {
     this.loading = true;
-    // console.log(sort);
+    console.log(sort, filter);
     // console.log("PAGE:: ",page);
-    this.ps.getEmployees(page, sort).then((result) => {
+    this.ps.getEmployees(page, sort, filter).then((result) => {
       console.log("RESULT", result['page']);
 
       this.employeeObjects = result['data'];

@@ -31,16 +31,21 @@ employeeRoutes.route('/').get(function (req, res, next) {
     if (req.query.size == undefined) {
         req.query.size = 12;
     }
-    if(req.query.sort == undefined){
-        req.query.sort = '';
+    // if(req.query.sort == undefined){
+    //     req.query.sort = '';
+    // }
+    if(req.query.filter == undefined){
+        req.query.filter = '[a-z]*';
     }
+    
 
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
     var sort = (req.query.sort);
+    var filter = req.query.filter;
     var query = {};
 
-    console.log(sort);
+    console.log("SORT",sort);
 
     if (page < 0 || page === 0) {
 
@@ -50,11 +55,12 @@ employeeRoutes.route('/').get(function (req, res, next) {
     query.skip = size * (page - 1);
     query.limit = size;
     query.sort = sort;
+    query.filter = filter;
     
+    // console.log('REGEXP',new RegExp("^"+ filter, "i"));
+
     //find some documents
-
-
-    Employee.find({}).skip(query.skip).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
+    Employee.find({name: new RegExp("^"+ filter, "i")}).skip(query.skip).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
         Employee.count().exec(function(err, count){
             if(err) return next(err)
             let data = {
