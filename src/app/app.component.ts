@@ -6,6 +6,8 @@ import { NavigationCancel,
          NavigationError,
          NavigationStart,
          Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,10 @@ import { NavigationCancel,
 })
 export class AppComponent {
   title = 'meanstack1';
-  constructor(private _loadingBar:SlimLoadingBarService, private _router: Router){
+
+  isLoggedIn$: Observable<boolean>;
+
+  constructor(private _loadingBar:SlimLoadingBarService, private _router: Router, private us: UserService){
     this._router.events.subscribe((event: Event)=>{
       this.navigationInterceptor(event);
     });
@@ -34,4 +39,8 @@ export class AppComponent {
       this._loadingBar.stop();
     }
   }
+
+  // ngOnInit(){
+  //   this.isLoggedIn$ = this.us.isLoggedIn;
+  // }
 }

@@ -17,7 +17,7 @@ export class PersonService {
       gender: gender,
       age: age
     };
-    console.log("service",obj);
+    // console.log("service",obj);
     //this.http.post(`${this.uri}/add`, obj).subscribe(res => console.log('Done'));
 
     let promise = new Promise((resolve, reject) => {
@@ -37,19 +37,9 @@ export class PersonService {
     return promise;
   }
 
-  // //to convert the parameters of type other than string to httpParams type.
-  // private getHttpParams(params: any): HttpParams { 
-  //   let _httpParams = new HttpParams(); 
-  //   if (params) { for (let prop in params) 
-  //     { if (params.hasOwnProperty(prop)) 
-  //       { let val = params[prop].toString(); 
-  //         _httpParams = _httpParams.append(prop, val); 
-  //       } } } return _httpParams; }
+  getEmployees(page: number, sort?: string, filter?: string, fgender?: string) {
 
-
-  getEmployees(page: number, sort?: string, filter?: string) {
-
-    // console.log("FILTER", filter);
+    console.log("FILTER", fgender);
 
     let promise = new Promise((resolve, reject) => {
       let apiURL = `${this.uri}`;
@@ -59,7 +49,8 @@ export class PersonService {
         fromObject: { 
           page: pg.toString(),
           sort: sort,
-          filter: filter  
+          filter: filter,
+          fgender: fgender  
         }
         })
      })
@@ -75,9 +66,26 @@ export class PersonService {
         );
     });
     return promise;
-
-
   }
+
+  getDepartment() {
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = `${this.uri}`;
+      this.http.get(apiURL)
+        .toPromise()
+        .then(
+          res => { // Success
+
+            resolve(res);
+          },
+          msg => { // Error
+            reject(msg);
+          }
+        );
+    });
+    return promise;
+  }
+
 
   editEmployee(id) {
     //console.log("HERE");
@@ -109,7 +117,7 @@ export class PersonService {
       gender: gender,
       age: age
     };
-    // console.log(obj);
+    console.log(obj);
     // this.http.post(`${this.uri}/update/${id}`, obj).subscribe(res => console.log('Updated'));
 
     let promise = new Promise((resolve, reject) => {

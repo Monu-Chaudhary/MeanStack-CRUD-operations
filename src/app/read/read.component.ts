@@ -19,27 +19,30 @@ export class ReadComponent implements OnInit {
   page: number = 1;
   count: number = 0;
   loading: boolean;
-  employeeProperties: Employee;
+  departmnet: Observable<string[]>;
   // sort: string='';
 
   filterForm: FormGroup;
 
   ngOnInit() {
     this.getPage(1);
+    // this.getDepartment();
   }
 
-  sortData(sort: string, filter?: string){
-    console.log("ok SORT:",sort, '\n Filter', filter);
-    this.getPage(this.page, sort, filter);
+  sortData(sort: string, filter?: string, fgender?: string){
+    console.log("ok SORT:",sort, '\n Filter', filter, "Gender", fgender);
+    if(filter) var page =1;
+    else page = this.page
+    this.getPage(page, sort, filter, fgender);
   }
 
-  getPage(page: number, sort?: string, filter?: string) {
+  getPage(page: number=1, sort?: string, filter?: string, fgender?: string) {
     this.loading = true;
-    console.log(sort, filter);
+    console.log("1", sort, filter, fgender);
     // console.log("PAGE:: ",page);
-    this.ps.getEmployees(page, sort, filter).then((result) => {
-      console.log("RESULT", result['page']);
-
+    this.ps.getEmployees(page, sort, filter, fgender).then((result) => {
+      console.log("RESULT", result['data']);
+      console.log("result", result);
       this.employeeObjects = result['data'];
       this.count = result['count'];
       this.page = result['page'];
@@ -47,7 +50,9 @@ export class ReadComponent implements OnInit {
     });
   }
 
+  getDepartment(){
 
+  }
 
   constructor(private ps: PersonService, private router: Router, private fb: FormBuilder ) {
     this.createForm();
@@ -56,7 +61,9 @@ export class ReadComponent implements OnInit {
   createForm(){
     this.filterForm = this.fb.group({
       sort: ['', Validators.required],
-      filter: ['', Validators.required]
+      fname: ['', Validators.required],
+      fgender: ['', Validators.required],
+      fdepartment: ['', Validators.required]
     });
   }
 

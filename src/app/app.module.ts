@@ -11,14 +11,19 @@ import { CreateComponent } from './create/create.component';
 import { ReadComponent } from './read/read.component';
 import { UpdateComponent } from './update/update.component';
 import { PersonService } from './person.service';
+import {  UserService } from './user.service';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateComponent,
     ReadComponent,
-    UpdateComponent
+    UpdateComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     NgxPaginationModule,
@@ -28,7 +33,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [PersonService],
+  providers: [PersonService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

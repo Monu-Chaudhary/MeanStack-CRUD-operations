@@ -8,7 +8,8 @@ let Employee = new Schema({
         type: String
     },
     department : String,
-    age : Number
+    age : Number,
+    gender: String
 },{
     collection: 'employee'
 });

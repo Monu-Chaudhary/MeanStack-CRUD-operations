@@ -10,10 +10,11 @@ import {Router} from '@angular/router';
 })
 export class CreateComponent implements OnInit {
 
-  exampleForm: FormGroup;
   constructor(private fb: FormBuilder, private ps: PersonService, private router: Router) {
     this.createForm();
    }
+
+  exampleForm: FormGroup;
 
    createForm(){
      this.exampleForm = this.fb.group({
@@ -26,7 +27,6 @@ export class CreateComponent implements OnInit {
 
    addPerson(name, department, gender, age){
      this.ps.addPerson(name, department, gender, age);
-     //location.reload();
      this.router.navigate(['employee']);
    }
 

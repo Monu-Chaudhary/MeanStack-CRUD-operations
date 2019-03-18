@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+// const app = express();
 const employeeRoutes = express.Router();
 
 
@@ -9,11 +9,10 @@ let Employee = require('../models/Employee');
 //defined store route
 employeeRoutes.route('/add').post(function (req, res) {
     let employee = new Employee(req.body);
-    // console.log("URL",employee, "\n Request", req.body);
     employee.save()
         .then(employee => {
             res.status(200).json({ 'employee': 'employee is added successfully' });
-            res.redirect('/employee');
+            // res.redirect('/employee');
         })
         .catch(err => {
             res.status(400).send("unable to save to database");
@@ -23,7 +22,7 @@ employeeRoutes.route('/add').post(function (req, res) {
 //defined get data(index or listing) route
 employeeRoutes.route('/').get(function (req, res, next) {
 
-    console.log("HERE");
+    // console.log("HERE");
     
     if (req.query.page == undefined) {
         req.query.page = 1;
@@ -37,15 +36,19 @@ employeeRoutes.route('/').get(function (req, res, next) {
     if(req.query.filter == undefined){
         req.query.filter = '[a-z]*';
     }
+    if(req.query.fgender == undefined){
+        req.query.filter = '[a-z]*';
+    }
     
 
     var page = parseInt(req.query.page);
     var size = parseInt(req.query.size);
     var sort = (req.query.sort);
     var filter = req.query.filter;
+    var fgender = req.query.fgender;
     var query = {};
 
-    console.log("SORT",sort);
+    console.log("gender::", fgender);
 
     if (page < 0 || page === 0) {
 
@@ -56,11 +59,10 @@ employeeRoutes.route('/').get(function (req, res, next) {
     query.limit = size;
     query.sort = sort;
     query.filter = filter;
+    query.fgender = fgender;
     
-    // console.log('REGEXP',new RegExp("^"+ filter, "i"));
-
     //find some documents
-    Employee.find({name: new RegExp("^"+ filter, "i")}).skip(query.skip).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
+    Employee.find({name: new RegExp("^"+ filter, "i"), gender: new RegExp("^"+ fgender, "i")}).skip(query.skip).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
         Employee.count().exec(function(err, count){
             if(err) return next(err)
             let data = {
@@ -83,22 +85,24 @@ employeeRoutes.route('/edit/:id').get(function (req, res) {
 });
 
 //define update route
-employeeRoutes.route('/update/:id').post(function (req, res) {
-    // console.log('employeeUpdateRoute');
+employeeRoutes.route('/update/:id').post(function (req, res, next) {
+    console.log(req.params,req.body);
     Employee.findById(req.params.id, function (err, employee) {
         if (!employee)
             return next(new Error('Could not load document'));
+            
         else {
             // console.log("updating");
             employee.name = req.body.name;
             employee.department = req.body.department;
             employee.age = req.body.age;
+            employee.gender = req.body.gender;
 
             employee.save().then(employee => {
                 res.json('Update complete');
             })
                 .catch(err => {
-                    res.status(400).send('enable to update db');
+                    res.status(400).send('unable to update db');
                 });
         }
     });
