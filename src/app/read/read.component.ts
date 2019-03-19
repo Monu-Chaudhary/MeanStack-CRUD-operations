@@ -20,7 +20,7 @@ export class ReadComponent implements OnInit {
   count: number = 0;
   loading: boolean;
   departmnet: Observable<string[]>;
-  // sort: string='';
+  sort: string='';
 
   filterForm: FormGroup;
 
@@ -31,8 +31,8 @@ export class ReadComponent implements OnInit {
 
   sortData(sort: string, filter?: string, fgender?: string){
     console.log("ok SORT:",sort, '\n Filter', filter, "Gender", fgender);
-    if(filter) var page =1;
-    else page = this.page
+    if(filter) var page = 1;
+    else page = this.page;
     this.getPage(page, sort, filter, fgender);
   }
 

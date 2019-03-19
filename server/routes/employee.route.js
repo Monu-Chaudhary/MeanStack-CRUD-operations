@@ -48,7 +48,7 @@ employeeRoutes.route('/').get(function (req, res, next) {
     var fgender = req.query.fgender;
     var query = {};
 
-    console.log("gender::", fgender);
+    console.log("sort::", sort);
 
     if (page < 0 || page === 0) {
 
@@ -60,6 +60,8 @@ employeeRoutes.route('/').get(function (req, res, next) {
     query.sort = sort;
     query.filter = filter;
     query.fgender = fgender;
+
+    console.log(query.sort);
     
     //find some documents
     Employee.find({name: new RegExp("^"+ filter, "i"), gender: new RegExp("^"+ fgender, "i")}).skip(query.skip).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{

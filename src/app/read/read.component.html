@@ -32,7 +32,7 @@
       </div>
 
       <div>
-        <button (click)="sortData(sort.value, fname.value, fgender.value)">Go</button>
+        <button (click)="sortData(sort.value, fname.value, fgender.value)">Search</button>
       </div>
 
     </div>
@@ -40,30 +40,38 @@
 
   </div>
 
-</form>
 
-<table class="table table-hover">
-  <tr>
-    <td>Name</td>
-    <td>Department</td>
-    <td>Age</td>
-    <td>Gender</td>
-    <td colspan="2">Action</td>
-  </tr>
-
-  <tbody>
-    <tr
-      *ngFor="let employee of employeeObjects  | paginate: {id: 'demoProject',itemsPerPage:12 ,currentPage: page, totalItems:count}">
-
-      <td>{{ employee.name}}</td>
-      <td>{{ employee.department}}</td>
-      <td>{{ employee.age}}</td>
-      <td>{{employee.gender}}</td>
-      <td><a id='update' [routerLink]="['update', employee._id]" class="btn btn-primary">Edit</a></td>
-      <td><a id='delete' (click)="deleteEmployee(employee._id)" class="btn btn-danger">Delete</a></td>
+  <table class="table table-hover" >
+    <tr >
+      <td formControlName="sort" #sort>Name 
+        <button (click)="sortData(sort.value, fname.value, fgender.value)">
+          <i class="fa fa-sort" ></i>
+        </button>
+      </td>
+      <td>Department<button><i class="fa fa-sort"></i></button></td>
+      <td>Age<button><i class="fa fa-sort"></i></button></td>
+      <td>Gender<button><i class="fa fa-sort"></i></button></td>
+      <td colspan="2">Action</td>
     </tr>
-    <pagination-controls (pageChange)="getPage($event, sort.value, fname.value, fgender.value)"
-      screenReaderPageLabel="page" id="demoProject">
-    </pagination-controls>
-  </tbody>
-</table>
+
+    <tbody>
+      <tr
+        *ngFor="let employee of employeeObjects  | paginate: {id: 'demoProject',itemsPerPage:12 ,currentPage: page, totalItems:count}">
+
+        <td>{{ employee.name}}</td>
+        <td>{{ employee.department}}</td>
+        <td>{{ employee.age}}</td>
+        <td>{{employee.gender}}</td>
+        <td><a id='update' [routerLink]="['update', employee._id]" class="btn btn-primary">Edit</a></td>
+        <td><a id='delete' (click)="deleteEmployee(employee._id)" class="btn btn-danger">Delete</a></td>
+      </tr>
+      <tr>
+      
+    </tr>
+    </tbody>
+    
+  </table>
+  <pagination-controls (pageChange)="getPage($event, sort.value, fname.value, fgender.value)"
+  screenReaderPageLabel="page" id="demoProject">
+</pagination-controls>
+</form>
