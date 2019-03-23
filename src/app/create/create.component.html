@@ -1,0 +1,123 @@
+<!-- <div class="card">
+  <div class="card-body">
+    <form [formGroup]="exampleForm" novalidate>
+      
+      <div class="form-group">
+        <label class="col-md-4">Name</label>
+        <input type="text" class="form-control" formControlName="name" #name>
+      </div>
+
+      <div *ngIf="exampleForm.controls['name'].invalid && (exampleForm.controls['name'].dirty || exampleForm.controls['name'].touched)" class="alert alert-danger">
+        <div *ngIf="exampleForm.controls['name'].errors.required">
+          Name is required.
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label class="cold-md-4">Department</label>
+        <input type="text" class="form-control" formControlName="department" #department>
+      </div>
+
+      <div *ngIf="exampleForm.controls['department'].invalid && (exampleForm.controls['department'].dirty || exampleForm.controls['department'].touched)" class="alert alert-danger">
+        <div *ngIf="exampleForm.controls['department'].errors.required">
+          department is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4">Age</label>
+        <input type="text" class="form-control" formControlName="age" #age>
+      </div>
+
+      <div *ngIf="exampleForm.controls['age'].invalid && (exampleForm.controls['age'].dirty || exampleForm.controls['age'].touched)" class="alert alert-danger">
+        <div *ngIf="exampleForm.controls['age'].errors.required">
+          age is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4">Gender</label>
+        <input type="text" class="form-control" formControlName="gender" #gender>
+      </div>
+
+      <div *ngIf="exampleForm.controls['gender'].invalid && (exampleForm.controls['gender'].dirty || exampleForm.controls['gender'].touched)" class="alert alert-danger">
+        <div *ngIf="exampleForm.controls['gender'].errors.required">
+          gender is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button (click)="addPerson(name.value, department.value, gender.value, age.value)" [disabled]="exampleForm.pristine || exampleForm.invalid" class="btn btn-primary">ADD</button>
+      </div>
+
+    </form>
+  </div>
+</div> -->
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="add-employee-title">Add Employee</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="exampleForm" novalidate>
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <div class="input-group">
+          <input type="text" class="form-control" formControlName="name" #name>
+        </div>
+      </div>
+
+      <div *ngIf="exampleForm.controls['name'].invalid && (exampleForm.controls['name'].dirty || exampleForm.controls['name'].touched)" class="alert alert-danger">
+          <div *ngIf="exampleForm.controls['name'].errors.required">
+            Name is required.
+          </div> 
+        </div>
+  
+        <div class="form-group">
+          <label class="cold-md-4">Department</label>
+          <input type="text" class="form-control" formControlName="department" #department>
+        </div>
+  
+        <div *ngIf="exampleForm.controls['department'].invalid && (exampleForm.controls['department'].dirty || exampleForm.controls['department'].touched)" class="alert alert-danger">
+          <div *ngIf="exampleForm.controls['department'].errors.required">
+            department is required.
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label class="col-md-4">Age</label>
+          <input type="text" class="form-control" formControlName="age" #age>
+        </div>
+  
+        <div *ngIf="exampleForm.controls['age'].invalid && (exampleForm.controls['age'].dirty || exampleForm.controls['age'].touched)" class="alert alert-danger">
+          <div *ngIf="exampleForm.controls['age'].errors.required">
+            age is required
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label class="col-md-4">Gender</label>
+          <input type="text" class="form-control" formControlName="gender" #gender>
+        </div>
+  
+        <div *ngIf="exampleForm.controls['gender'].invalid && (exampleForm.controls['gender'].dirty || exampleForm.controls['gender'].touched)" class="alert alert-danger">
+          <div *ngIf="exampleForm.controls['gender'].errors.required">
+            gender is required
+          </div>
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark btn-primary" (click)="modal.close('Save click'); addPerson(name.value, department.value, gender.value, age.value)" [disabled]="exampleForm.pristine || exampleForm.invalid">Save</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Add new Employee</button>
+
+<hr>
+
+<!-- <pre>{{closeResult}}</pre> -->
