@@ -8,7 +8,11 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
+<<<<<<< HEAD
   // { path: 'employee/create', component: CreateComponent },
+=======
+  { path: 'employee/create', component: CreateComponent },
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
   { path: 'employee/update/:id', component: UpdateComponent },
   { path: 'employee', component: ReadComponent },
   { path: 'user', component: LoginComponent },

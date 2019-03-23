@@ -1,6 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+<<<<<<< HEAD
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+=======
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -32,8 +35,12 @@ import { RegisterComponent } from './register/register.component';
     ReactiveFormsModule,
     SlimLoadingBarModule,
     BrowserModule,
+<<<<<<< HEAD
     AppRoutingModule,
     NgbModule
+=======
+    AppRoutingModule
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
   ],
   providers: [PersonService, UserService],
   bootstrap: [AppComponent]

@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {PersonService} from '../person.service';
+<<<<<<< HEAD
 // import {Router} from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+=======
+import {Router} from '@angular/router';
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
 
 @Component({
   selector: 'app-create',
@@ -11,6 +15,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 export class CreateComponent implements OnInit {
 
+<<<<<<< HEAD
   // closeResult: string;
 
   constructor(
@@ -18,6 +23,9 @@ export class CreateComponent implements OnInit {
     // private router: Router, 
     private ps: PersonService, 
     private modalService: NgbModal) {
+=======
+  constructor(private fb: FormBuilder, private ps: PersonService, private router: Router) {
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
     this.createForm();
    }
 
@@ -32,6 +40,7 @@ export class CreateComponent implements OnInit {
      });
    }
 
+<<<<<<< HEAD
   open(content){
     this.modalService.open(content, {ariaLabelledBy: 'add-employee-title'}).result.then((result)=>{
       console.log('Closed with',result);
@@ -55,6 +64,11 @@ export class CreateComponent implements OnInit {
    addPerson(name, department, gender, age){
      this.ps.addPerson(name, department, gender, age);
     //  this.router.navigate(['employee']);
+=======
+   addPerson(name, department, gender, age){
+     this.ps.addPerson(name, department, gender, age);
+     this.router.navigate(['employee']);
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
    }
 
   ngOnInit() {

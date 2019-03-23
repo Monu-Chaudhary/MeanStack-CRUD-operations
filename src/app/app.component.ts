@@ -8,7 +8,10 @@ import { NavigationCancel,
          Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
+<<<<<<< HEAD
 import { CreateComponent} from './create/create.component';
+=======
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
 
 @Component({
   selector: 'app-root',

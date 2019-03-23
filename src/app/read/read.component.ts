@@ -4,7 +4,10 @@ import { PersonService } from '../person.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+<<<<<<< HEAD
 import { UpdateComponent} from '../update/update.component';
+=======
+>>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
 
 @Component({
   selector: 'app-read',
