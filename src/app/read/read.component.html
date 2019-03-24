@@ -1,16 +1,16 @@
 <form [formGroup]="filterForm" novalidate>
 
-  <select formControlName="sort" #sort (change)="sortData($event.target.value)">
+  <!-- <select formControlName="sort" #sort (change)="sortData($event.target.value)">
     <option value="name"> Name</option>
     <option value="department"> Department</option>
     <option value="age"> Age</option>
-  </select>
+  </select> -->
 
   <div class="form-group container">
 
-    <div class="row">
+    <!-- <div class="row">
       <label>Search</label>
-    </div>
+    </div> -->
 
     <div class="row">
 
@@ -41,20 +41,20 @@
   </div>
 
 
-  <table class="table table-hover" >
-    <tr >
-<<<<<<< HEAD
+  <table class="table table-hover">
+    <tr>
       <td>Name 
-=======
-      <td formControlName="sort" #sort>Name 
->>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
-        <button (click)="sortData(sort.value, fname.value, fgender.value)">
-          <i class="fa fa-sort" ></i>
-        </button>
+        <button *ngIf="true" value="name" #sort (click)="sortData(sort.value, fname.value, fgender.value)"><i class="fa fa-sort" ></i></button>
       </td>
-      <td>Department<button><i class="fa fa-sort"></i></button></td>
-      <td>Age<button><i class="fa fa-sort"></i></button></td>
-      <td>Gender<button><i class="fa fa-sort"></i></button></td>
+      <td>Department
+        <button *ngIf="true" value="department" #sort (click)="sortData(sort.value, fname.value, fgender.value)"><i class="fa fa-sort"></i></button>
+        </td> 
+      <td>Age
+        <button *ngIf="true" value="age" #sort (click)="sortData(sort.value, fname.value, fgender.value)"><i class="fa fa-sort"></i></button>
+        </td> 
+      <td>Gender
+        <button *ngIf="true" value="gender" #sort (click)="sortData(sort.value, fname.value, fgender.value)"><i class="fa fa-sort"></i></button>
+      </td>
       <td colspan="2">Action</td>
     </tr>
 
@@ -65,15 +65,11 @@
         <td>{{ employee.name}}</td>
         <td>{{ employee.department}}</td>
         <td>{{ employee.age}}</td>
-        <td>{{employee.gender}}</td>
-<<<<<<< HEAD
+        <td>{{ employee.gender}}</td>
         <td>
             <!-- <a id='update' [routerLink]="['update', employee._id]" class="btn btn-primary">Edit</a> -->
           <app-update [updateMessage]="employee._id"></app-update>
         </td>
-=======
-        <td><a id='update' [routerLink]="['update', employee._id]" class="btn btn-primary">Edit</a></td>
->>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
         <td><a id='delete' (click)="deleteEmployee(employee._id)" class="btn btn-danger">Delete</a></td>
       </tr>
       <tr>

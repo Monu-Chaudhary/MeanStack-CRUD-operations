@@ -37,9 +37,9 @@ export class PersonService {
     return promise;
   }
 
-  getEmployees(page: number, sort?: string, filter?: string, fgender?: string) {
+  getEmployees(page: number, sort?: string, fname?: string, fgender?: string) {
 
-    console.log("FILTER", fgender);
+    // console.log("FILTER", fgender);
 
     let promise = new Promise((resolve, reject) => {
       let apiURL = `${this.uri}`;
@@ -49,7 +49,7 @@ export class PersonService {
         fromObject: { 
           page: pg.toString(),
           sort: sort,
-          filter: filter,
+          fname: fname,
           fgender: fgender  
         }
         })

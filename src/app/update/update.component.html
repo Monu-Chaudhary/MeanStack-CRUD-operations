@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!-- <div class="card">
   <div class="card-body"> -->
 
@@ -60,58 +59,3 @@
 </ng-template>
 
 <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Edit</button>
-=======
-<div class="card">
-  <div class="card-body">
-    <form [formGroup]="exampleForm" novalidate>
-      
-      <div class="form-group">
-        <label class="col-md-4">Name</label>
-        <input type="text" class="form-control" formControlName="name" #name [(ngModel)]="employee.name">
-      </div>
-      <div *ngIf="exampleForm.controls['name'].invalid && (exampleForm.controls['name'].dirty || exampleForm.controls['name'].touched)" class="alert alert-danger">
-        <div *ngIf="exampleForm.controls['name'].errors.required">
-          Person Name is required.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-md-4">department</label>
-        <input type="text" class="form-control" formControlName="department" #department [(ngModel)] = "employee.department" />
-      </div>
-      <div *ngIf="exampleForm.controls['department'].invalid && (exampleForm.controls['department'].dirty || exampleForm.controls['department'].touched)" class="alert alert-danger">
-        <div *ngIf="exampleForm.controls['department'].errors.required">
-          department is required.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-md-4">age</label>
-        <input type="text" class="form-control" formControlName="age" #age [(ngModel)] = "employee.age" />
-      </div>
-      <div *ngIf="exampleForm.controls['age'].invalid && (exampleForm.controls['age'].dirty || exampleForm.controls['age'].touched)" class="alert alert-danger">
-        <div *ngIf="exampleForm.controls['age'].errors.required">
-          age is required.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-md-4">gender</label>
-        <input type="text" class="form-control" formControlName="gender" #gender [(ngModel)] = "employee.gender" />
-      </div>
-      <div *ngIf="exampleForm.controls['gender'].invalid && (exampleForm.controls['gender'].dirty || exampleForm.controls['gender'].touched)" class="alert alert-danger">
-        <div *ngIf="exampleForm.controls['gender'].errors.required">
-          gender is required.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <button (click)="updateEmployee(name.value, department.value, gender.value, age.value)"
-        [disabled]="exampleForm.invalid" 
-        class="btn btn-primary">Update Employee</button>
-      </div>
-
-    </form>
-  </div>
-</div>
->>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf

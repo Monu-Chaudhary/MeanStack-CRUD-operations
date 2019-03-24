@@ -1,13 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Output, Input } from '@angular/core';
 import Employee from '../Employee';
 import { PersonService } from '../person.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-<<<<<<< HEAD
 import { UpdateComponent} from '../update/update.component';
-=======
->>>>>>> 97791b81e012b443ab1eecac6b72d0c253c747bf
 
 @Component({
   selector: 'app-read',
@@ -25,6 +22,7 @@ export class ReadComponent implements OnInit {
   loading: boolean;
   departmnet: Observable<string[]>;
   sort: string='';
+  order: string='';
 
   filterForm: FormGroup;
 
@@ -33,18 +31,20 @@ export class ReadComponent implements OnInit {
     // this.getDepartment();
   }
 
-  sortData(sort: string, filter?: string, fgender?: string){
-    console.log("ok SORT:",sort, '\n Filter', filter, "Gender", fgender);
-    if(filter) var page = 1;
+  sortData(sort?: string, fname?: string, fgender?: string){
+    // console.log("ok SORT:",, '\n Filter', fname, "Gender", fgender);
+    if(this.order === sort) sort = '-'+sort;
+    this.order = sort;
+    if((fname || fgender) && !sort) var page = 1;
     else page = this.page;
-    this.getPage(page, sort, filter, fgender);
+    this.getPage(page, sort, fname, fgender);
   }
 
-  getPage(page: number=1, sort?: string, filter?: string, fgender?: string) {
+  getPage(page: number=1, sort?: string, fname?: string, fgender?: string) {
     this.loading = true;
-    console.log("1", sort, filter, fgender);
+    console.log("1", sort, fname, fgender);
     // console.log("PAGE:: ",page);
-    this.ps.getEmployees(page, sort, filter, fgender).then((result) => {
+    this.ps.getEmployees(page, sort, fname, fgender).then((result) => {
       console.log("RESULT", result['data']);
       console.log("result", result);
       this.employeeObjects = result['data'];
