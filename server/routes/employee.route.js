@@ -5,10 +5,17 @@ const employeeRoutes = express.Router();
 
 //require employee model in our routes model
 let Employee = require('../models/Employee');
+let Department = require('../models/Department');
 
 //defined store route
-employeeRoutes.route('/add').post(function (req, res) {
-    let employee = new Employee(req.body);
+employeeRoutes.route('/employee/add').post(function (req, res) {
+    let employee = new Employee({
+        name: req.body.name,
+        age: req.body.age,
+        gender: req.body.gender,
+        department: req.body.department
+    });
+
     employee.save()
         .then(employee => {
             res.status(200).json({ 'employee': 'employee is added successfully' });
@@ -20,7 +27,7 @@ employeeRoutes.route('/add').post(function (req, res) {
 });
 
 //defined get data(index or listing) route
-employeeRoutes.route('/').get(function (req, res, next) {
+employeeRoutes.route('/employee').get(function (req, res, next) {
 
     // console.log("HERE");
     
@@ -36,8 +43,11 @@ employeeRoutes.route('/').get(function (req, res, next) {
     if(req.query.fname == undefined){
         req.query.fname = '[a-z]*';
     }
-    if(req.query.fgender == undefined){
+    if(req.query.fgender == undefined || req.query.fgender == ''){
         req.query.fgender = '[a-z]*';
+    }
+    if(req.query.drpdnDepartment == undefined || req.query.drpdnDepartment == ''){
+        req.query.drpdnDepartment = '[1-9 a-z]*';
     }
     
 
@@ -46,6 +56,7 @@ employeeRoutes.route('/').get(function (req, res, next) {
     var sort = (req.query.sort);
     var fname = req.query.fname;
     var fgender = req.query.fgender;
+    var fdepartment = req.query.drpdnDepartment;
     var query = {};
 
     // console.log("sort::", sort);
@@ -61,10 +72,10 @@ employeeRoutes.route('/').get(function (req, res, next) {
     // query.fnamer = fname;
     // query.fgender = fgender;
 
-    console.log(query.sort);
+    console.log("department",fdepartment, "fname: ", fgender);
     
     //find some documents
-    Employee.find({name: new RegExp("^"+ fname, "i"), gender: new RegExp("^"+ fgender, "i")}).skip(query.skip).collation({locale:'en'}).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
+    Employee.find({name: new RegExp("^"+ fname, "i"), gender: new RegExp("^"+ fgender, "i"), department: (fdepartment)}).populate('department').skip(query.skip).collation({locale:'en'}).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
         Employee.count().exec(function(err, count){
             if(err) return next(err)
             let data = {
@@ -78,16 +89,20 @@ employeeRoutes.route('/').get(function (req, res, next) {
 });
 
 //define edit route
-employeeRoutes.route('/edit/:id').get(function (req, res) {
+employeeRoutes.route('/employee/edit/:id').get(function (req, res) {
     // console.log('editRoute');
-    let id = req.params.id;
-    Employee.findById(id, function (err, employee) {
+    let ID = req.params.id;
+    // Employee.findById(id, function (err, employee) {
+    //     res.json(employee);
+    // });
+    Employee.findOne({ _id: ID }).populate('department').exec(function (err, employee) {
+        console.log("eMPLOYEE",employee);
         res.json(employee);
-    });
+  });
 });
 
 //define update route
-employeeRoutes.route('/update/:id').post(function (req, res, next) {
+employeeRoutes.route('/employee/update/:id').post(function (req, res, next) {
     console.log(req.params,req.body);
     Employee.findById(req.params.id, function (err, employee) {
         if (!employee)
@@ -111,12 +126,21 @@ employeeRoutes.route('/update/:id').post(function (req, res, next) {
 });
 
 //define delete| remove | destroy route
-employeeRoutes.route('/delete/:id').get(function (req, res) {
+employeeRoutes.route('/employee/delete/:id').get(function (req, res) {
     Employee.findByIdAndRemove({ _id: req.params.id }, function (err, employee) {
         if (err) res.json(err);
         else res.json('Successfully removed');
     });
 });
 
+employeeRoutes.route('/department').get(function(req, res){
+    Department.find(function(err, departments){
+        if(err) res.json(err);
+        let data = {
+            departments: departments
+        }
+        res.json(data);
+    })
+})
 
 module.exports = employeeRoutes;

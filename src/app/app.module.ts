@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'; 
+import {ToastrModule} from 'ng6-toastr-notifications';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,12 +32,15 @@ import { RegisterComponent } from './register/register.component';
     NgxPaginationModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     SlimLoadingBarModule,
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
-  providers: [PersonService, UserService],
+  providers: [PersonService, UserService, ReadComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

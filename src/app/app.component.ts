@@ -8,7 +8,7 @@ import { NavigationCancel,
          Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
-import { CreateComponent} from './create/create.component';
+// import {ToastrManager} from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-root',
@@ -41,6 +41,10 @@ export class AppComponent {
     }
   }
 
+
+  // showSuccess(msg){
+  //   this.toastr.successToastr(msg);
+  // }
   // ngOnInit(){
   //   this.isLoggedIn$ = this.us.isLoggedIn;
   // }

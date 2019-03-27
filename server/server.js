@@ -57,7 +57,7 @@ const express = require('express'),
     });
     
     app.use('/user', userRoutes);
-    app.use('/employee', employeeRoutes);
+    app.use('/', employeeRoutes);
     const port = process.env.PORT || 4000;
 
     const server = app.listen(port, function(){

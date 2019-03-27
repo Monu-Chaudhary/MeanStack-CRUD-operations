@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {PersonService} from '../person.service';
 // import {Router} from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+import { ReadComponent } from '../read/read.component';
 
 @Component({
   selector: 'app-create',
@@ -10,11 +12,10 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./create.component.css']
 })
 export class CreateComponent implements OnInit {
-
-  // closeResult: string;
-
+  
   constructor(
     private fb: FormBuilder, 
+    private rc: ReadComponent,
     // private router: Router, 
     private ps: PersonService, 
     private modalService: NgbModal) {
@@ -22,17 +23,22 @@ export class CreateComponent implements OnInit {
    }
 
   exampleForm: FormGroup;
+  departments: Observable<string[]>;
 
    createForm(){
      this.exampleForm = this.fb.group({
        name: ['', Validators.required],
-       department: ['', Validators.required],
+       department: [''],
        gender: ['', Validators.required],
        age: ['', Validators.required]
      });
    }
 
   open(content){
+    this.ps.getDepartment().then((result)=>{
+      this.departments = result['departments']
+    })
+    // console.log('department',this.dpt);
     this.modalService.open(content, {ariaLabelledBy: 'add-employee-title'}).result.then((result)=>{
       console.log('Closed with',result);
       // this.closeResult = 'Closed with: ${result}';
@@ -54,8 +60,15 @@ export class CreateComponent implements OnInit {
 
    addPerson(name, department, gender, age){
      this.ps.addPerson(name, department, gender, age);
+
     //  this.router.navigate(['employee']);
    }
+
+  //  showSuccess(){
+  //   var msg = "Employee added successfully" 
+  //   this.rc.showSuccess(msg);
+
+  //  }
 
   ngOnInit() {
   }
