@@ -16,14 +16,34 @@ employeeRoutes.route('/employee/add').post(function (req, res) {
         department: req.body.department
     });
 
-    employee.save()
+    let name= req.body.name;
+
+    req.checkBody('name', 'Name is required').exists();
+    req.checkBody('employee.age', 'Age is required').exists();
+
+    var errors = req.validationErrors();
+    if(errors){
+        console.log("error",errors);
+        req.session.errors = errors;
+        req.session.success = false;
+        res.redirect('/employee');
+        res.status(400).send("Validation Error!");
+    }
+
+    else{
+        employee.save()
         .then(employee => {
+            req.session.success = true;
             res.status(200).json({ 'employee': 'employee is added successfully' });
             // res.redirect('/employee');
         })
         .catch(err => {
+            req.session.success = false;
+            req.session.error = err;
             res.status(400).send("unable to save to database");
         });
+    }
+    
 });
 
 //defined get data(index or listing) route
@@ -40,15 +60,7 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
     // if(req.query.sort == undefined){
     //     req.query.sort = '';
     // }
-    if(req.query.fname == undefined){
-        req.query.fname = '[a-z]*';
-    }
-    if(req.query.fgender == undefined || req.query.fgender == ''){
-        req.query.fgender = '[a-z]*';
-    }
-    if(req.query.drpdnDepartment == undefined || req.query.drpdnDepartment == ''){
-        req.query.drpdnDepartment = '[1-9 a-z]*';
-    }
+    
     
 
     var page = parseInt(req.query.page);
@@ -69,15 +81,28 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
     query.skip = size * (page - 1);
     query.limit = size;
     query.sort = sort;
-    // query.fnamer = fname;
-    // query.fgender = fgender;
-
-    console.log("department",fdepartment, "fname: ", fgender);
+    
+    query.filter=[];
+    if(req.query.fname && req.query.fname !== 'undefined'){
+        query.filter = [{name: new RegExp("^"+ fname, "i")}];
+    }
+    if(req.query.fgender && req.query.fgender !== 'undefined'){
+        query.filter.push({gender: { $regex: fgender, $options: "i"}})
+    }
+    if(req.query.drpdnDepartment && req.query.drpdnDepartment !== 'undefined'){
+        query.filter.push({department: fdepartment})
+    }
+    if(query.filter.length != 0){
+        query.find = {$and: query.filter}
+    }
+    // console.log("query.filter", query.filter);
+    // console.log("query.find", query.find);
     
     //find some documents
-    Employee.find({name: new RegExp("^"+ fname, "i"), gender: new RegExp("^"+ fgender, "i"), department: (fdepartment)}).populate('department').skip(query.skip).collation({locale:'en'}).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
+    Employee.find(query.find).populate('department').skip(query.skip).collation({locale:'en'}).sort(query.sort).limit(query.limit).exec((err, EmployeeObjects)=>{
         Employee.count().exec(function(err, count){
             if(err) return next(err)
+            console.log("EmployeeObjects",EmployeeObjects);
             let data = {
                 count : count,
                 data: EmployeeObjects, 

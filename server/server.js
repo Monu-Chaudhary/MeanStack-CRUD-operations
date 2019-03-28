@@ -8,7 +8,8 @@ const express = require('express'),
     errorHandler = require('./_helpers/error-handler'),
     flash = require('connect-flash'),
     session = require('express-session'),
-    Employee = require('./models/Employee');
+    // Employee = require('./models/Employee'),
+  expressValidator = require('express-validator')
 
     const employeeRoutes = require('./routes/employee.route');
     const userRoutes = require('./routes/user.route');
@@ -28,6 +29,8 @@ const express = require('express'),
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(cors());
     app.options('*', cors());
+
+    app.use(expressValidator());
 
     app.use(
         session({

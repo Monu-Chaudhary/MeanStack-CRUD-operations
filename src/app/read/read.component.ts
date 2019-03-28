@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { PersonService } from '../person.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -89,9 +89,5 @@ export class ReadComponent implements OnInit {
     });
   }
   }
-
-  // showSuccess(msg?: string){
-  //   // this.toastr.successToastr(msg);
-  // }
 
 }

@@ -64,6 +64,7 @@ export class PersonService {
             resolve(res);
           },
           msg => { // Error
+            this.toastr.errorToastr("Error Encountered"+msg);
             reject(msg);
           }
         );
