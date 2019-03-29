@@ -41,23 +41,23 @@ const express = require('express'),
       );
 
     //passport middleware
-    app.use(passport.initialize());
-    app.use(passport.session());
+    // app.use(passport.initialize());
+    // app.use(passport.session());
     
     require('./_helpers/passport.js')(passport);
 
         // Connect flash
-    app.use(flash());
+    // app.use(flash());
 
-    app.use(errorHandler);
+    // app.use(errorHandler);
 
     // Global variables
-    app.use(function(req, res, next) {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
-    });
+    // app.use(function(req, res, next) {
+    // res.locals.success_msg = req.flash('success_msg');
+    // res.locals.error_msg = req.flash('error_msg');
+    // res.locals.error = req.flash('error');
+    // next();
+    // });
     
     app.use('/user', userRoutes);
     app.use('/', employeeRoutes);

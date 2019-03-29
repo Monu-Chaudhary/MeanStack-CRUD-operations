@@ -27,7 +27,7 @@ export class CreateComponent implements OnInit {
 
    createForm(){
      this.exampleForm = this.fb.group({
-       name: ['', Validators.required],
+       name: [''],
        department: [''],
        gender: ['', Validators.required],
        age: ['', Validators.required]

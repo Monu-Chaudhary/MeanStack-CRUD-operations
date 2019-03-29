@@ -27,12 +27,15 @@ export class PersonService {
         .toPromise()
         .then(
           res => { // Success
-            this.toastr.successToastr('Employee Added Successfully');
+            console.log(JSON.stringify(res));
+            this.toastr.successToastr(JSON.stringify(res));
             resolve(res);
           },
           msg => { // Error
+            this.toastr.errorToastr(msg.error);
+            console.log(msg.error);
             reject(msg);
-            this.toastr.errorToastr("Error Adding Employee"+ msg);
+            // this.addPerson(obj.name, obj.department, obj.gender, obj.age);
           }
         );
     });
@@ -64,7 +67,7 @@ export class PersonService {
             resolve(res);
           },
           msg => { // Error
-            this.toastr.errorToastr("Error Encountered"+msg);
+            this.toastr.errorToastr(msg.error);
             reject(msg);
           }
         );
@@ -83,7 +86,8 @@ export class PersonService {
             resolve(res);
           },
           msg => { // Error
-            reject(msg);
+            this.toastr.errorToastr(msg.error);
+            reject(msg.error);
           }
         );
     });
@@ -103,6 +107,7 @@ export class PersonService {
             resolve(res);
           },
           msg => { // Error
+            this.toastr.errorToastr(msg.error);
             reject(msg);
           }
         );
@@ -130,11 +135,11 @@ export class PersonService {
         .toPromise()
         .then(
           res => { // Success
-            this.toastr.successToastr('Updated Successfully!!');
+            this.toastr.successToastr(JSON.stringify(res));
             resolve(res);
           },
           msg => { // Error
-            this.toastr.successToastr('Updated Error!!'+ msg);
+            this.toastr.errorToastr(msg.error);
             reject(msg);
           }
         );
@@ -155,7 +160,7 @@ export class PersonService {
             resolve(res);
           },
           msg => { // Error
-            this.toastr.errorToastr('Error Deleating!!'+ msg);
+            this.toastr.errorToastr(msg.error);
             reject(msg);
           }
         );
