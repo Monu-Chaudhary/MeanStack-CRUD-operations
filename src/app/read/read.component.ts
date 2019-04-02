@@ -24,6 +24,8 @@ export class ReadComponent implements OnInit {
   sort: string = '';
   order: string = '';
   departments: Observable<string[]>;
+  // sortByName: string = '';
+  name: string = '';
 
   filterForm: FormGroup;
 
@@ -34,18 +36,19 @@ export class ReadComponent implements OnInit {
 
   sortData(sort?: string, fname?: string, drpdnDepartment?:string, fgender?: string) {
     console.log("param",drpdnDepartment);
-    if (this.order === sort) sort = '-' + sort;
-    this.order = sort;
+    if (this.order === 'asc') this.order = 'desc';
+    else this.order = 'asc';
     if ((fname || fgender || drpdnDepartment) && !sort) var page = 1;
     else page = this.page;
-    this.getPage(page, sort, fname, drpdnDepartment, fgender);
+    console.log("sort",sort);
+    this.getPage(page, this.order, sort, fname, drpdnDepartment, fgender);
   }
 
-  getPage(page: number = 1, sort?: string, fname?: string,drpdnDepartment?: string, fgender?: string) {
+  getPage(page: number = 1,order?: string, sort?: string, fname?: string,drpdnDepartment?: string, fgender?: string) {
     this.loading = true;
     page = page || 1;
     console.log("param",drpdnDepartment);
-    this.ps.getEmployees(page, sort, fname,drpdnDepartment, fgender).then((result) => {
+    this.ps.getEmployees(page, order, sort, fname,drpdnDepartment, fgender).then((result) => {
       console.log("RESULT", result['data']);
       // console.log("result", result);
       this.employeeObjects = result['data'];
@@ -74,7 +77,7 @@ export class ReadComponent implements OnInit {
       fname: ['', Validators.required],
       fgender: ['', Validators.required],
       fdepartment: ['', Validators.required],
-      drpdnDepartment: ['']
+      drpdnDepartment: [''],
     });
   }
 

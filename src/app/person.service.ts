@@ -18,8 +18,6 @@ export class PersonService {
       gender: gender,
       age: age
     };
-    // console.log("service",obj);
-    //this.http.post(`${this.uri}/add`, obj).subscribe(res => console.log('Done'));
 
     let promise = new Promise((resolve, reject) => {
       let apiURL = `${this.uri}/employee/add`;
@@ -28,31 +26,33 @@ export class PersonService {
         .then(
           res => { // Success
             console.log(JSON.stringify(res));
-            this.toastr.successToastr(JSON.stringify(res));
+            this.toastr.successToastr(JSON.parse(JSON.stringify(res)).msg);
             resolve(res);
           },
           msg => { // Error
-            this.toastr.errorToastr(msg.error);
-            console.log(msg.error);
+            var message = JSON.parse(JSON.stringify(msg.error)).msg;
+            message.forEach(element => {
+            this.toastr.errorToastr(element.msg);              
+            });
+            // console.log(JSON.parse(JSON.stringify(msg.error)).msg);
             reject(msg);
-            // this.addPerson(obj.name, obj.department, obj.gender, obj.age);
           }
         );
     });
     return promise;
   }
 
-  getEmployees(page: number, sort?: string, fname?: string, drpdnDepartment?: string,fgender?: string) {
+  getEmployees(page: number, order?:string, sort?: string, fname?: string, drpdnDepartment?: string,fgender?: string) {
 
-    // console.log("FILTER", fgender);
+    console.log("ORDER", order);
 
     let promise = new Promise((resolve, reject) => {
       let apiURL = `${this.uri}/employee`;
-      // let pg = this.getHttpParams(page);
       let pg = page;
       this.http.get(apiURL, { params: new HttpParams({
         fromObject: { 
           page: pg.toString(),
+          order: order,
           sort: sort,
           fname: fname,
           drpdnDepartment: drpdnDepartment,
@@ -135,11 +135,12 @@ export class PersonService {
         .toPromise()
         .then(
           res => { // Success
-            this.toastr.successToastr(JSON.stringify(res));
+            this.toastr.successToastr(JSON.parse(JSON.stringify(res)).msg);
             resolve(res);
           },
           msg => { // Error
-            this.toastr.errorToastr(msg.error);
+            this.toastr.errorToastr(JSON.parse(JSON.stringify(msg.error)).msg);
+            console.log("Error",JSON.parse(JSON.stringify(msg.error)).msg);
             reject(msg);
           }
         );
@@ -156,7 +157,12 @@ export class PersonService {
         .toPromise()
         .then(
           res => { // Success
-            this.toastr.successToastr('Deleted Successfully');
+            var response = JSON.parse(JSON.stringify(res));
+            // console.log("TYPE........",typeof(response));
+            if (response.success)
+            this.toastr.successToastr(response.msg);
+            else 
+            this.toastr.infoToastr(response.msg);
             resolve(res);
           },
           msg => { // Error
@@ -166,11 +172,6 @@ export class PersonService {
         );
     });
     return promise;
-
-    //return this.http.get(`${this.uri}/delete/${id}`);
   }
 
-  // showSuccess(msg?: string){
-  //     this.toastr.successToastr(msg);
-  //   }
 }

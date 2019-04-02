@@ -1,23 +1,22 @@
-<form [formGroup]="filterForm" novalidate>
+<form novalidate>
   <div class="form-group container">
     <div class="row">
 
       <label class="col-md-1">Name</label>
       <div class="col-md-1">
-        <input type="text" class="form-control" formControlName="fname" #fname>
+        <input type="text" class="form-control" [(ngModel)]="name" name="name" #fname ngDefaultControl>
       </div>
 
       <label class="col-md-1">Department</label>
       <div class="col-md-2">
-        <select formControlName="drpdnDepartment" #drpdnDepartment>
-          <!-- <option></option> -->
+        <select [(ngModel)]="drpdndepartment" name="drpdndepartment" #drpdnDepartment ngDefaultControl>
           <option *ngFor="let department of departments" [value]="department._id">{{department.name}}</option>
         </select>
       </div>
 
       <label class="col-md-1">Gender</label>
       <div class="col-md-1">
-        <input type="text" class="form-control" formControlName="fgender" #fgender>
+        <input type="text" class="form-control" [(ngModel)]="gender" name="gender" #fgender ngDefaultControl>
       </div>
 
       <div>
@@ -26,28 +25,32 @@
 
     </div>
   </div>
+</form>
 
 
   <table class="table table-hover">
     <tr>
       <td>Name 
-        <button *ngIf="true" value="name" #sort (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort" ></i></button>
+        <!-- <button *ngIf="true" value="name" #sort (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)"> -->
+          <button (click)="sortData('insensitive', fname.value, drpdnDepartment.value, fgender.value)">
+          <i class="fa fa-sort" ></i>
+        </button>
       </td>
       <td>Department
-        <button *ngIf="true" value="department" #sort (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
+        <button (click)="sortData('department', drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
         </td> 
       <td>Age
-        <button *ngIf="true" value="age" #sort (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
+        <button (click)="sortData('age', drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
         </td> 
       <td>Gender
-        <button *ngIf="true" value="gender" #sort (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
+        <button (click)="sortData('gender',fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
       </td>
       <td colspan="2">Action</td>
     </tr>
 
     <tbody>
       <tr
-        *ngFor="let employee of employeeObjects| paginate: {id: 'demoProject',itemsPerPage:12 ,currentPage: page, totalItems:count}; let i = index">
+        *ngFor="let employee of employeeObjects| paginate: {id: 'demoProject',itemsPerPage:10 ,currentPage: page, totalItems:count}; let i = index">
 
         <td>{{ employee.name}}</td>
         <td>{{ employee.department.name}}</td>
@@ -68,4 +71,3 @@
   <pagination-controls (pageChange)="getPage($event, sort.value, fname.value, drpdnDepartment.value, fgender.value)"
   screenReaderPageLabel="page" id="demoProject">
 </pagination-controls>
-</form>
