@@ -32,7 +32,7 @@
     <tr>
       <td>Name 
         <!-- <button *ngIf="true" value="name" #sort (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)"> -->
-          <button (click)="sortData('insensitive', fname.value, drpdnDepartment.value, fgender.value)">
+          <button #sort value='name' (click)="sortData('insensitive', fname.value, drpdnDepartment.value, fgender.value)">
           <i class="fa fa-sort" ></i>
         </button>
       </td>
@@ -68,6 +68,6 @@
     </tbody>
     
   </table>
-  <pagination-controls (pageChange)="getPage($event, sort.value, fname.value, drpdnDepartment.value, fgender.value)"
+  <pagination-controls (pageChange)="getPage(obj={page: $event, sort: sort.value})"
   screenReaderPageLabel="page" id="demoProject">
 </pagination-controls>

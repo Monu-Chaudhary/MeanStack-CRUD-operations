@@ -9,10 +9,10 @@ import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   // { path: 'employee/create', component: CreateComponent },
-  { path: 'employee/update/:id', component: UpdateComponent },
+  // { path: 'employee/update/:id', component: UpdateComponent },
   { path: 'employee', component: ReadComponent },
   { path: 'user', component: LoginComponent },
-  { path: '', redirectTo: '/user', pathMatch: 'full' },
+  { path: '', redirectTo: '/employee', pathMatch: 'full' },
   { path: 'user/register', component: RegisterComponent }
 
 

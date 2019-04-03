@@ -15,6 +15,10 @@ export class UpdateComponent implements OnInit {
   employee: any = {};
   exampleForm: FormGroup;
   @Input() updateMessage: string;
+  // @Input() edit = function edit() {
+  //   console.log("EDITING");
+    
+  // }
   departments: Observable<string[]>;
 
   // createSelector(selectEmployees, employee): Selector;
@@ -38,9 +42,16 @@ export class UpdateComponent implements OnInit {
   }
 
   open(content){
+    
+    this.route.params.subscribe(params => {
+      this.ps.editEmployee(this.updateMessage).then(res => {
+        this.employee = res;
+        console.log(res);
+      });      
+    });
     this.ps.getDepartment().then((result)=>{
       this.departments = result['departments']
-    })
+    });
     this.modalService.open(content, {ariaLabelledBy: 'update-employee-title'}).result.then((result)=>{
       console.log('Closed with',result);
     },(reason)=>{
@@ -62,20 +73,18 @@ export class UpdateComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.ps.updateEmployee(this.employee.name, this.employee.department._id, this.employee.gender, this.employee.age, this.updateMessage);
       this.router.navigate(['employee']);
+      // window.location = ;
     });
   }
 
   ngOnInit() {
-    // console.log("edit Ok");
-    // console.log('ID', this.updateMessage);
-    this.route.params.subscribe(params => {
-      this.ps.editEmployee(this.updateMessage).then(res => {
-        this.employee = res;
-        console.log(res);
-      });      
-    });
-
-    // open('');
+    
+    // this.route.params.subscribe(params => {
+    //   this.ps.editEmployee(this.updateMessage).then(res => {
+    //     this.employee = res;
+    //     console.log(res);
+    //   });      
+    // });
   }
 
 }

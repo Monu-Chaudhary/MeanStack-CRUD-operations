@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {ToastrManager} from 'ng6-toastr-notifications';
+// import { url } from '../main';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonService {
 
+  // uri = url.uri;
   uri = 'http://localhost:4000';
 
-  constructor(private http: HttpClient, public toastr: ToastrManager) { }
+  constructor(private http: HttpClient, public toastr: ToastrManager ) { }
 
   addPerson(name, department, gender, age) {
     const obj = {
@@ -42,24 +44,28 @@ export class PersonService {
     return promise;
   }
 
-  getEmployees(page: number, order?:string, sort?: string, fname?: string, drpdnDepartment?: string,fgender?: string) {
+  getEmployees(q) {
 
-    console.log("ORDER", order);
+    // console.log("ORDER", order);
 
     let promise = new Promise((resolve, reject) => {
-      let apiURL = `${this.uri}/employee`;
-      let pg = page;
-      this.http.get(apiURL, { params: new HttpParams({
-        fromObject: { 
-          page: pg.toString(),
-          order: order,
-          sort: sort,
-          fname: fname,
-          drpdnDepartment: drpdnDepartment,
-          fgender: fgender  
-        }
-        })
-     })
+      let apiURL = `${this.uri}/employee${q}`;
+      // let pg = page;
+      this.http.get(apiURL
+    //     , {
+    //      params: new HttpParams({
+    //     fromObject: obj
+    //     // { 
+    //     //   page: pg.toString(),
+    //     //   order: order,
+    //     //   sort: sort,
+    //     //   fname: fname,
+    //     //   drpdnDepartment: drpdnDepartment,
+    //     //   fgender: fgender  
+    //     // }
+    //     })
+    //  }
+     )
         .toPromise()
         .then(
           res => { // Success

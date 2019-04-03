@@ -15,7 +15,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ReadComponent implements OnInit {
 
   employeeObjects: any;
-  // public filter: string = '';
   // employeeObjects: Observable<string[]>;
   page: number = 1;
   count: number = 0;
@@ -24,7 +23,6 @@ export class ReadComponent implements OnInit {
   sort: string = '';
   order: string = '';
   departments: Observable<string[]>;
-  // sortByName: string = '';
   name: string = '';
 
   filterForm: FormGroup;
@@ -34,25 +32,39 @@ export class ReadComponent implements OnInit {
     this.getDepartment();
   }
 
-  sortData(sort?: string, fname?: string, drpdnDepartment?:string, fgender?: string) {
-    console.log("param",drpdnDepartment);
-    if (this.order === 'asc') this.order = 'desc';
-    else this.order = 'asc';
+  sortData(sort?: string, fname?: string, drpdnDepartment?: string, fgender?: string) {
+    if (sort) {
+      if (this.order === 'asc') this.order = 'desc';
+      else this.order = 'asc';
+    }
     if ((fname || fgender || drpdnDepartment) && !sort) var page = 1;
     else page = this.page;
-    console.log("sort",sort);
-    this.getPage(page, this.order, sort, fname, drpdnDepartment, fgender);
+    console.log("sort:", sort, " order", this.order, " fname:", fname, " drpdnDepartment: ", drpdnDepartment, "fgender: ", fgender)
+    var obj = {
+      page: page || 1,
+      order: this.order,
+      sort: sort,
+      fname: fname,
+      drpdnDepartment: drpdnDepartment,
+      fgender: fgender,
+    };
+    this.getPage(obj);
   }
 
-  getPage(page: number = 1,order?: string, sort?: string, fname?: string,drpdnDepartment?: string, fgender?: string) {
+  getPage(obj) {
+    console.log("object", obj, " page:", obj.page, " sort:", obj.sort, " order", obj.order, " fname:", obj.fname, " drpdnDepartment: ", obj.drpdnDepartment, "fgender: ", obj.fgender)
+    var q = '?';
+    if (obj.page) q = q + 'page=' + obj.page + '&';
+    if (obj.order) q = q + 'order=' + obj.order + '&';
+    if (obj.sort) q = q + 'sort=' + obj.sort + '&';
+    if (obj.fname) q = q + 'fname=' + obj.fname + '&';
+    if (obj.drpdnDepartment) q = q + 'drpdnDepartment=' + obj.drpdnDepartment + '&';
+    if (obj.fgender) q = q + 'fgender=' + obj.fgender;
+    console.log(q);
     this.loading = true;
-    page = page || 1;
-    console.log("param",drpdnDepartment);
-    this.ps.getEmployees(page, order, sort, fname,drpdnDepartment, fgender).then((result) => {
+    this.ps.getEmployees(q).then((result) => {
       console.log("RESULT", result['data']);
-      // console.log("result", result);
       this.employeeObjects = result['data'];
-      // console.log(this.employeeObjects);
       this.count = result['count'];
       this.page = result['page'];
       this.loading = false;
@@ -62,7 +74,7 @@ export class ReadComponent implements OnInit {
   getDepartment() {
     this.ps.getDepartment().then((result) => {
       this.departments = result['departments'];
-      console.log('dept',this.departments,'\t', result);
+      console.log('dept', this.departments, '\t', result);
 
     })
   }
@@ -81,16 +93,14 @@ export class ReadComponent implements OnInit {
     });
   }
 
-  deleteEmployee(id,ind) {
-    var result =confirm("Are you sure you want to delete?");
-    if(result) {
+  deleteEmployee(id, ind) {
+    var result = confirm("Are you sure you want to delete?");
+    if (result) {
       this.ps.deleteEmployee(id).then(res => {
-      // this.showSuccess('Deleted Successfully');
-      var index = this.employeeObjects.indexOf(id);
-      console.log(index);
-      this.employeeObjects.splice(ind, 1);
-    });
-  }
+        console.log(ind);
+        this.employeeObjects.splice(ind, 1);
+      });
+    }
   }
 
 }

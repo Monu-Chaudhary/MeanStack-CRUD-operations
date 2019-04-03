@@ -10,3 +10,8 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
+
+  // export const url = {
+  //   uri :'http://localhost:4000'
+  // }
+

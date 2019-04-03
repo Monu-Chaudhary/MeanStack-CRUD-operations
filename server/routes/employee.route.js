@@ -158,8 +158,6 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
             { $skip: query.skip },
             { $limit: query.limit }
         ]
-        // ,
-        // { collation: { locale: 'en' } }
     ).exec((err, EmployeeObjects) => {
         if (err) res.json({ success: false, msg: err });
         else {
@@ -174,10 +172,11 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
                 { $project: { 'Count.count': 1 } }
             ]).exec((err, Count) => {
                 console.log("EmployeeObjects", EmployeeObjects);
-                console.log("COUNT", Count[0].Count[0].count);
+                console.log("COUNT", Count);
+                if(Count[0].Count[0]) var count = Count[0].Count[0].count;
+                else var count = 0;
                 let data = {
-                    count: Count[0].Count[0].count,
-                    // count: 7,
+                    count: count,
                     data: EmployeeObjects,
                     page: page
                 };

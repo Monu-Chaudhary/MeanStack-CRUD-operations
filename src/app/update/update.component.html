@@ -69,7 +69,7 @@
   </form>
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark btn-primary" (click)="modal.close('Save click'); updateEmployee()" [disabled]=" name.invalid || gender.invalid">Save</button>
+      <button type="button" class="btn btn-outline-dark btn-primary" (click)="modal.close('Save click'); updateEmployee()" [disabled]=" name.invalid || gender.invalid || department.invalid || age.invalid">Save</button>
     </div>
 </ng-template>
 

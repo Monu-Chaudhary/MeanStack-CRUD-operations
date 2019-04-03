@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {PersonService} from '../person.service';
-// import {Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { ReadComponent } from '../read/read.component';
@@ -16,7 +16,7 @@ export class CreateComponent implements OnInit {
   constructor(
     private fb: FormBuilder, 
     private rc: ReadComponent,
-    // private router: Router, 
+    private router: Router, 
     private ps: PersonService, 
     private modalService: NgbModal) {
     this.createForm();
@@ -60,8 +60,8 @@ export class CreateComponent implements OnInit {
 
    addPerson(name, department, gender, age){
      this.ps.addPerson(name, department, gender, age);
-
-    //  this.router.navigate(['employee']);
+    alert("hi");
+     this.router.navigate(['employee']);
    }
 
   //  showSuccess(){
