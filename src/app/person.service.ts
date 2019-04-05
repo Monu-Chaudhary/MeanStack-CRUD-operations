@@ -27,7 +27,7 @@ export class PersonService {
         .toPromise()
         .then(
           res => { // Success
-            console.log(JSON.stringify(res));
+            // console.log(JSON.stringify(res));
             this.toastr.successToastr(JSON.parse(JSON.stringify(res)).msg);
             resolve(res);
           },
@@ -125,14 +125,14 @@ export class PersonService {
 
 
   updateEmployee(name, department, gender, age, id) {
-    console.log("updateEmployee");
+    // console.log("updateEmployee");
     const obj = {
       name: name,
       department: department,
       gender: gender,
       age: age
     };
-    console.log(obj);
+    // console.log(obj);
     // this.http.post(`${this.uri}/update/${id}`, obj).subscribe(res => console.log('Updated'));
 
     let promise = new Promise((resolve, reject) => {

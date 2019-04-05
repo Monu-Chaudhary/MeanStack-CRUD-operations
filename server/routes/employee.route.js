@@ -42,7 +42,7 @@ employeeRoutes.route('/employee/add').post(function (req, res) {
         employee.save()
             .then(employee => {
                 req.session.success = true;
-                res.status(200).json({ success: true, msg: 'Employee is added successfully' });
+                res.status(200).json({ success: true, msg: 'Employee is added successfully', data: employee });
                 // res.status(200).send('Employee successfully added');
                 // res.redirect('/employee');
             })
@@ -63,7 +63,7 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
     }
 
     if (req.query.size == undefined) {
-        req.query.size = 10;
+        req.query.size = 5;
     }
 
     var page = parseInt(req.query.page);
@@ -267,17 +267,18 @@ employeeRoutes.route('/employee/update/:id').post(function (req, res, next) {
             res.status(400).json({ success: false, msg: 'Could not load document' });
 
         else {
-            // console.log("updating");
             employee.name = req.body.name;
             employee.department = req.body.department;
             employee.age = req.body.age;
             employee.gender = req.body.gender;
-
+            console.log("age", employee.age, '\n employee', employee);
+            
             employee.save().then(employee => {
-                res.json({ success: true, msg: 'Update complete' });
+                // find
+                res.json({ success: true, msg: 'Update complete', data: employee });
             })
                 .catch(err => {
-                    res.status(400).json({ success: false, msg: 'unable to update db' });
+                    res.status(400).json({ success: false, msg: err });
                 });
         }
     });

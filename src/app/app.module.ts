@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModalRef, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -36,11 +36,12 @@ import { RegisterComponent } from './register/register.component';
     SlimLoadingBarModule,
     BrowserModule,
     AppRoutingModule,
-    NgbModule,
+    NgbModule.forRoot(),
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
-  providers: [PersonService, UserService, ReadComponent],
-  bootstrap: [AppComponent]
+  providers: [PersonService, UserService, ReadComponent, NgbActiveModal],
+  bootstrap: [AppComponent],
+  // entryComponents: [UpdateComponent]
 })
 export class AppModule { }

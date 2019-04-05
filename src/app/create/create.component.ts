@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {PersonService} from '../person.service';
 import {Router} from '@angular/router';
@@ -15,13 +15,13 @@ export class CreateComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder, 
-    private rc: ReadComponent,
     private router: Router, 
     private ps: PersonService, 
     private modalService: NgbModal) {
     this.createForm();
    }
 
+  @Output() addedData = new EventEmitter();
   exampleForm: FormGroup;
   departments: Observable<string[]>;
 
@@ -59,9 +59,16 @@ export class CreateComponent implements OnInit {
   }
 
    addPerson(name, department, gender, age){
-     this.ps.addPerson(name, department, gender, age);
-    alert("hi");
-     this.router.navigate(['employee']);
+     this.ps.addPerson(name, department, gender, age)
+      .then((res: any)=>{
+        this.modalService.dismissAll('Save Close');
+        console.log("RES", res.data);
+        this.addedData.emit({addedEmployee: res.data});
+      }).catch((err) => {
+        console.log(err);
+      });
+    // alert("hi");
+    //  this.router.navigate(['employee']);
    }
 
   //  showSuccess(){

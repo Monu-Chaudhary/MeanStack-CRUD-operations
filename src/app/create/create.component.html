@@ -62,6 +62,7 @@
           <select formControlName="gender" #gender>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
+          <option value="Other">Other</option>
         </select>
         </div>
   
@@ -74,7 +75,7 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark btn-primary" (click)="modal.close('Save click'); addPerson(name.value, department.value, gender.value, age.value)" [disabled]="exampleForm.pristine || exampleForm.invalid">Save</button>
+    <button type="button" class="btn btn-outline-dark btn-primary" (click)="addPerson(name.value, department.value, gender.value, age.value)" [disabled]="exampleForm.pristine || exampleForm.invalid">Save</button>
     
   </div>
 </ng-template>

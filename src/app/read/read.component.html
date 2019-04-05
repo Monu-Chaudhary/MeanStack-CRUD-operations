@@ -1,26 +1,35 @@
+<app-create (addedData)="addToList($event)" ></app-create>
+
 <form novalidate>
   <div class="form-group container">
     <div class="row">
 
       <label class="col-md-1">Name</label>
-      <div class="col-md-1">
+      <div class="col-md-2">
         <input type="text" class="form-control" [(ngModel)]="name" name="name" #fname ngDefaultControl>
       </div>
 
       <label class="col-md-1">Department</label>
       <div class="col-md-2">
         <select [(ngModel)]="drpdndepartment" name="drpdndepartment" #drpdnDepartment ngDefaultControl>
+          <option></option>
           <option *ngFor="let department of departments" [value]="department._id">{{department.name}}</option>
         </select>
       </div>
 
       <label class="col-md-1">Gender</label>
-      <div class="col-md-1">
-        <input type="text" class="form-control" [(ngModel)]="gender" name="gender" #fgender ngDefaultControl>
+      <div class="col-md-2">
+        <select [(ngModel)]="gender" name="gender" #fgender ngDefaultControl>
+          <option></option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <!-- <input type="text" class="form-control" [(ngModel)]="gender" name="gender" #fgender ngDefaultControl> -->
       </div>
 
-      <div>
-        <button (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)">Search</button>
+      <div class="col-md-1">
+        <button (click)="sortData('', fname.value, drpdnDepartment.value, fgender.value)">Search</button>
       </div>
 
     </div>
@@ -32,25 +41,25 @@
     <tr>
       <td>Name 
         <!-- <button *ngIf="true" value="name" #sort (click)="sortData(sort.value, fname.value, drpdnDepartment.value, fgender.value)"> -->
-          <button #sort value='name' (click)="sortData('insensitive', fname.value, drpdnDepartment.value, fgender.value)">
-          <i class="fa fa-sort" ></i>
-        </button>
+          <button #sortByName value='insensitive' (click)="sortData(sortByName.value, fname.value, drpdnDepartment.value, fgender.value)">
+            <i class="fa fa-sort" ></i> 
+          </button>
       </td>
       <td>Department
-        <button (click)="sortData('department', drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
+          <button #sortByDep value='department' (click)="sortData(sortByDep.value,fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
         </td> 
       <td>Age
-        <button (click)="sortData('age', drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
+          <button #sortByAge value="age" (click)="sortData(sortByAge.value, fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
         </td> 
       <td>Gender
-        <button (click)="sortData('gender',fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
+          <button #sortByGender value="gender" (click)="sortData(sortByGender.value, fname.value, drpdnDepartment.value, fgender.value)"><i class="fa fa-sort"></i></button>
       </td>
       <td colspan="2">Action</td>
     </tr>
 
     <tbody>
       <tr
-        *ngFor="let employee of employeeObjects| paginate: {id: 'demoProject',itemsPerPage:10 ,currentPage: page, totalItems:count}; let i = index">
+        *ngFor="let employee of employeeObjects| paginate: {id: 'demoProject',itemsPerPage:5 ,currentPage: page, totalItems:count}; let i = index">
 
         <td>{{ employee.name}}</td>
         <td>{{ employee.department.name}}</td>
@@ -58,7 +67,7 @@
         <td>{{ employee.gender}}</td>
         <td>
             <!-- <a id='update' [routerLink]="['update', employee._id]" class="btn btn-primary">Edit</a> -->
-          <app-update [updateMessage]="employee._id"></app-update>
+          <app-update [updateMessage]="employee._id" [index]="i" (updatedData)="updateList($event)"></app-update>
         </td>
         <td><a id='delete' (click)="deleteEmployee(employee._id,i)" class="btn btn-danger">Delete</a></td>
       </tr>
@@ -68,6 +77,6 @@
     </tbody>
     
   </table>
-  <pagination-controls (pageChange)="getPage(obj={page: $event, sort: sort.value})"
+  <pagination-controls (pageChange)="getPage(obj={page: $event, sort: '', order: '', fname: fname.value, drpdnDepartment: drpdnDepartment.value, fgender: fgender.value})"
   screenReaderPageLabel="page" id="demoProject">
 </pagination-controls>
