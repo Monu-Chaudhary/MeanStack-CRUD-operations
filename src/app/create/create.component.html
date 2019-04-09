@@ -30,21 +30,21 @@
   
         <div class="form-group">
           <label class="cold-md-4">Department</label>
-          <select fromControlName="department" #department>
-            <option></option>
+          <select class="form-control" fromControlName="department" #department>
+            <!-- <option></option> -->
           <option *ngFor="let department of departments" [value]="department._id">{{department.name}}</option>
           </select>
         </div>
   
         <div *ngIf="exampleForm.controls['department'].invalid && (exampleForm.controls['department'].dirty || exampleForm.controls['department'].touched)" class="alert alert-danger">
           <div *ngIf="exampleForm.controls['department'].errors.required">
-            department is required.
+            Department is required.
           </div>
         </div>
   
         <div class="form-group">
           <label class="col-md-4">Age</label>
-          <input type="number" class="form-control" formControlName="age" #age min= "18" max="60" pattern="^([2-6]\d|18|19)">
+          <input type="number" class="form-control" formControlName="age" #age min= "18" max="60" pattern="^([2-5]\d|18|19|60)">
         </div>
   
         <div *ngIf="exampleForm.controls['age'].invalid && (exampleForm.controls['age'].dirty || exampleForm.controls['age'].touched)" class="alert alert-danger">
@@ -68,7 +68,7 @@
   
         <div *ngIf="exampleForm.controls['gender'].invalid && (exampleForm.controls['gender'].dirty || exampleForm.controls['gender'].touched)" class="alert alert-danger">
           <div *ngIf="exampleForm.controls['gender'].errors.required">
-            gender is required
+            Gender is required
           </div>
         </div>
     </form>

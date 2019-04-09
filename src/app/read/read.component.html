@@ -6,12 +6,12 @@
 
       <label class="col-md-1">Name</label>
       <div class="col-md-2">
-        <input type="text" class="form-control" [(ngModel)]="name" name="name" #fname ngDefaultControl>
+        <input type="text" class="form-control" #fname ngDefaultControl>
       </div>
 
       <label class="col-md-1">Department</label>
       <div class="col-md-2">
-        <select [(ngModel)]="drpdndepartment" name="drpdndepartment" #drpdnDepartment ngDefaultControl>
+        <select #drpdnDepartment ngDefaultControl>
           <option></option>
           <option *ngFor="let department of departments" [value]="department._id">{{department.name}}</option>
         </select>
@@ -19,7 +19,7 @@
 
       <label class="col-md-1">Gender</label>
       <div class="col-md-2">
-        <select [(ngModel)]="gender" name="gender" #fgender ngDefaultControl>
+        <select #fgender ngDefaultControl>
           <option></option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
@@ -58,8 +58,10 @@
     </tr>
 
     <tbody>
+        <!-- {{employeeObjects.length}} -->
+        <tr></tr>
       <tr
-        *ngFor="let employee of employeeObjects| paginate: {id: 'demoProject',itemsPerPage:5 ,currentPage: page, totalItems:count}; let i = index">
+        *ngFor="let employee of employeeObjects| paginate: {id: 'demoProject',itemsPerPage:10 ,currentPage: page, totalItems:count}; let i = index">
 
         <td>{{ employee.name}}</td>
         <td>{{ employee.department.name}}</td>

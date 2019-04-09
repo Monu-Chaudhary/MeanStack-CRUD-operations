@@ -20,7 +20,9 @@ export class AppComponent {
 
   isLoggedIn$: Observable<boolean>;
 
-  constructor(private _loadingBar:SlimLoadingBarService, private _router: Router, private us: UserService){
+  constructor(
+  private _loadingBar: SlimLoadingBarService, 
+  private _router: Router, private us: UserService){
     this._router.events.subscribe((event: Event)=>{
       this.navigationInterceptor(event);
     });

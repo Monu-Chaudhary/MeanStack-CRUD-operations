@@ -1,10 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {PersonService} from '../person.service';
-import {Router} from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
-import { ReadComponent } from '../read/read.component';
 
 @Component({
   selector: 'app-create',
@@ -15,7 +13,6 @@ export class CreateComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder, 
-    private router: Router, 
     private ps: PersonService, 
     private modalService: NgbModal) {
     this.createForm();

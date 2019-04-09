@@ -122,8 +122,6 @@ export class PersonService {
 
   }
 
-
-
   updateEmployee(name, department, gender, age, id) {
     // console.log("updateEmployee");
     const obj = {
@@ -146,7 +144,7 @@ export class PersonService {
           },
           msg => { // Error
             this.toastr.errorToastr(JSON.parse(JSON.stringify(msg.error)).msg);
-            console.log("Error",JSON.parse(JSON.stringify(msg.error)).msg);
+            // console.log("Error",JSON.parse(JSON.stringify(msg.error)).msg);
             reject(msg);
           }
         );
@@ -176,6 +174,105 @@ export class PersonService {
             reject(msg);
           }
         );
+    });
+    return promise;
+  }
+
+  addAttendance(id, date){
+    console.log(typeof(date));
+    const obj = {id: id, date: date};
+    console.log(obj);
+    let promise = new Promise((resolve, reject)=>{
+      let apiURL = `${this.uri}/employee/attendance/${id}`;
+      this.http.post(apiURL, obj)
+      .toPromise()
+      .then(
+        res => { //success
+          this.toastr.successToastr(JSON.parse(JSON.stringify(res)).msg);
+          resolve(res);
+
+        },
+        msg => { //error
+          this.toastr.errorToastr(JSON.parse(JSON.stringify(msg.error)).msg);
+          reject(msg);
+        }
+      ).catch(err =>{
+        console.log("error occured", err);
+      }
+
+      );
+    });
+    return promise;
+  }
+
+  getAttendance(){
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = `${this.uri}/employee/attendance`;
+      this.http.get(apiURL)
+        .toPromise()
+        .then(
+          res => { // Success
+
+            resolve(res);
+          },
+          msg => { // Error
+            this.toastr.errorToastr(msg.error);
+            reject(msg.error);
+          }
+        );
+    });
+    return promise;
+  }
+
+  deleteAttendance(id) {
+    //console.log('hello');
+
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = `${this.uri}/employee/attendance/delete/${id}`;
+      this.http.get(apiURL)
+        .toPromise()
+        .then(
+          res => { // Success
+            var response = JSON.parse(JSON.stringify(res));
+            // console.log("TYPE........",typeof(response));
+            if (response.success)
+            this.toastr.successToastr(response.msg);
+            else 
+            this.toastr.infoToastr(response.msg);
+            resolve(res);
+          },
+          msg => { // Error
+            this.toastr.errorToastr(msg.error);
+            reject(msg);
+          }
+        );
+    });
+    return promise;
+  }
+
+  updateAttendance(id, EID, date){
+    console.log(typeof(date));
+    // console.log(id);
+    const obj = {id: EID, date: date};
+    let promise = new Promise((resolve, reject)=>{
+      let apiURL = `${this.uri}/employee/attendance/update/${id}`;
+      this.http.post(apiURL, obj)
+      .toPromise()
+      .then(
+        res => { //success
+          this.toastr.successToastr(JSON.parse(JSON.stringify(res)).msg);
+          resolve(res);
+
+        },
+        msg => { //error
+          this.toastr.errorToastr(JSON.parse(JSON.stringify(msg.error)).msg);
+          reject(msg);
+        }
+      ).catch(err =>{
+        console.log("error occured", err);
+      }
+
+      );
     });
     return promise;
   }

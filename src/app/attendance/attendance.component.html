@@ -1,0 +1,57 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="attendance-title">Add Attendance</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body">
+    <form [formGroup]="attendanceForm" novalidate>
+
+      <div class="form-group">
+        <label class="col-md-4">Name</label>
+        <!-- <input formControlName="Name" #Name> -->
+        <select formControlName="name" #name>
+          <option *ngFor="let employee of employeeObjects" [value]="employee._id">{{employee.name}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4">attended date</label>
+        <input type="date" [max]="maxDate" formControlName="date" #date>
+      </div>
+
+      <div >
+        <button *ngIf="option == 'add'" class="btn btn-primary" (click)="addAttendance(name.value, date.value)">Submit</button>
+        <button *ngIf="option == 'edit'" class="btn btn-primary" (click)="UpdateAttendance(name.value, date.value)">Edit</button>
+      </div>
+    </form>
+
+    
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content, 'add')">Add Attendance</button>
+
+<!-- <mat-form-field>
+      <label class="col-md-4">attended date</label>
+      <input matInput [matDatepicker]="mydatePicker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #mydatePicker></mat-datepicker>
+    </mat-form-field> -->
+
+<table class="table table-hover" style="text-align:center">
+  <tr >
+    <th>Employee Name</th>
+    <th>Attended date</th>
+    <th>Action</th>
+  </tr>
+  <tr *ngFor="let attendance of attendanceList; let i=index">
+    <td>{{attendance.id.name}}</td>
+    <td>{{attendance.date}}</td>
+    <td><a id='delete' (click)="deleteAttendance(attendance._id, i)" class="btn btn-danger">Delete</a>
+        <button class="btn btn-primary" style="margin-left: 1cm" (click)="open(content, 'edit', attendance._id, i)">Edit</button>
+<!-- <a style="margin-left: 1cm" (click)="updateAttendance(attendance, i)" class="btn btn-primary">Update</a></td> -->
+  </tr>
+</table>

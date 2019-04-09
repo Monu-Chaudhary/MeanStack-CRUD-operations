@@ -34,7 +34,7 @@ export class ReadComponent implements OnInit {
     this.getDepartment();
   }
 
-  sortData(sort?: string,fname?: string, drpdnDepartment?: string, fgender?: string) {
+  sortData(sort?: string, fname?: string, drpdnDepartment?: string, fgender?: string) {
     // console.log(this.sortByName);
     // sort = sort || this.sortByName || sortByGender || sortByDep || sortByAge;
     if (sort) {
@@ -57,7 +57,7 @@ export class ReadComponent implements OnInit {
 
   getPage(obj) {
     console.log("object", obj, " page:", obj.page, " sort:", obj.sort, " order", obj.order, " fname:", obj.fname, " drpdnDepartment: ", obj.drpdnDepartment, "fgender: ", obj.fgender)
-    
+
     var q = '?';
     if (obj.page) q = q + 'page=' + obj.page + '&';
     if (obj.order) q = q + 'order=' + obj.order + '&';
@@ -66,7 +66,7 @@ export class ReadComponent implements OnInit {
     if (obj.drpdnDepartment) q = q + 'drpdnDepartment=' + obj.drpdnDepartment + '&';
     if (obj.fgender) q = q + 'fgender=' + obj.fgender;
     console.log(q);
-    
+
     this.loading = true;
     this.ps.getEmployees(q).then((result) => {
       console.log("RESULT", result['data']);
@@ -81,7 +81,8 @@ export class ReadComponent implements OnInit {
     this.ps.getDepartment().then((result) => {
       this.departments = result['departments'];
       console.log('dept', this.departments, '\t', result);
-
+    }).catch((err) => {
+      console.log(err);
     })
   }
 
@@ -103,14 +104,14 @@ export class ReadComponent implements OnInit {
     var result = confirm("Are you sure you want to delete?");
     if (result) {
       this.ps.deleteEmployee(id).then(res => {
-        
+
         this.employeeObjects.splice(index, 1);
       });
     }
     console.log(this.employeeObjects.length);
   }
 
-  addToList(item){
+  addToList(item) {
     this.list = this.departments;
     item.addedEmployee.department = this.list.find((element) => {
       // console.log("ElemID", element._id, "\t", dept);
@@ -120,7 +121,7 @@ export class ReadComponent implements OnInit {
     this.employeeObjects.push(item.addedEmployee);
   }
 
-  updateList(item){
+  updateList(item) {
     // console.log("ITEMS",item);
     this.list = this.departments;
     // console.log("LIST", this.list);
@@ -128,7 +129,7 @@ export class ReadComponent implements OnInit {
       // console.log("ElemID", element._id, "\t", dept);
       return element._id === item.updatedEmployee.department;
     });
-    
+
     this.employeeObjects[item.i].name = item.updatedEmployee.name;
     this.employeeObjects[item.i].age = item.updatedEmployee.age;
     this.employeeObjects[item.i].department = item.departobject;
