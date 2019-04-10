@@ -12,19 +12,25 @@
       <div class="form-group">
         <label class="col-md-4">Name</label>
         <!-- <input formControlName="Name" #Name> -->
-        <select formControlName="name" #name>
-          <option *ngFor="let employee of employeeObjects" [value]="employee._id">{{employee.name}}</option>
+        <select id="Name" formControlName="name" #name (change)="onChange($event.target.value)">
+          <option *ngFor="let employee of employeeObjects" [value]="employee._id" required>{{employee.name}}</option>
         </select>
       </div>
 
+      <div *ngIf="attendanceForm.controls['name'].invalid && (attendanceForm.controls['name'].dirty || attendanceForm.controls['name'].touched)" class="alert alert-danger">
+          <div *ngIf="attendanceForm.controls['name'].errors.required">
+            name is required.
+          </div>
+        </div>
+
       <div class="form-group">
         <label class="col-md-4">attended date</label>
-        <input type="date" [max]="maxDate" formControlName="date" #date>
+        <input id="Date" type="date" [max]="maxDate" formControlName="date" #date>
       </div>
 
       <div >
-        <button *ngIf="option == 'add'" class="btn btn-primary" (click)="addAttendance(name.value, date.value)">Submit</button>
-        <button *ngIf="option == 'edit'" class="btn btn-primary" (click)="UpdateAttendance(name.value, date.value)">Edit</button>
+        <button *ngIf="option == 'add'" class="btn btn-outline-primary" (click)="addAttendance(name.value, date.value)" [disabled]="attendanceForm.invalid || attendanceForm.pristine">Submit</button>
+        <button *ngIf="option == 'edit'" class="btn btn-outline-primary" (click)="UpdateAttendance(name.value, date.value)" [disabled]="attendanceForm.invalid || attendanceForm.pristine">Edit</button>
       </div>
     </form>
 
@@ -33,13 +39,6 @@
 </ng-template>
 
 <button class="btn btn-lg btn-outline-primary" (click)="open(content, 'add')">Add Attendance</button>
-
-<!-- <mat-form-field>
-      <label class="col-md-4">attended date</label>
-      <input matInput [matDatepicker]="mydatePicker">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #mydatePicker></mat-datepicker>
-    </mat-form-field> -->
 
 <table class="table table-hover" style="text-align:center">
   <tr >
@@ -50,8 +49,8 @@
   <tr *ngFor="let attendance of attendanceList; let i=index">
     <td>{{attendance.id.name}}</td>
     <td>{{attendance.date}}</td>
-    <td><a id='delete' (click)="deleteAttendance(attendance._id, i)" class="btn btn-danger">Delete</a>
-        <button class="btn btn-primary" style="margin-left: 1cm" (click)="open(content, 'edit', attendance._id, i)">Edit</button>
+    <td><a id='delete' (click)="deleteAttendance(attendance._id, i)" class="btn btn-outline-danger">Delete</a>
+        <button class="btn btn-outline-primary" style="margin-left: 1cm" (click)="open(content, 'edit', attendance._id, i)">Edit</button>
 <!-- <a style="margin-left: 1cm" (click)="updateAttendance(attendance, i)" class="btn btn-primary">Update</a></td> -->
   </tr>
 </table>

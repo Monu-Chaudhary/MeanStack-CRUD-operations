@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as $AB from 'jquery';
 // import {MatDatepickerModule} from '@angular/material/datepicker';
 // import * as moment from 'moment';
 
 import { PersonService } from '../person.service';
+import { $ } from 'protractor';
 
 @Component({
   selector: 'app-attendance',
@@ -38,13 +40,12 @@ export class AttendanceComponent implements OnInit {
     this.attendanceForm = this.fb.group({
       name: ['', Validators.required],
       date: ['', Validators.required],
-      // Name: ['', Validators.required]
     })
   }
 
   open(content, option, id?, i?) {
     if (option == 'edit') {
-      this.AID =id;
+      this.AID = id;
       this.index = i;
       this.option = 'edit';
       // console.log(id);
@@ -99,7 +100,7 @@ export class AttendanceComponent implements OnInit {
       return attendance.id === element._id;
     });
     console.log(attendance);
-    attendance.date = attendance.date.substring(0,10);
+    attendance.date = attendance.date.substring(0, 10);
     this.attendanceList.push(attendance);
   }
 
@@ -108,9 +109,9 @@ export class AttendanceComponent implements OnInit {
       .then((res) => {
         this.attendanceList = res;
         this.attendanceList.forEach(attendance => {
-          attendance.date = attendance.date.substring(0,10);
+          attendance.date = attendance.date.substring(0, 10);
         });
-        console.log(this.attendanceList, "\n", this.attendanceList[0].date.substring(0,10), "\t", this.attendanceList[0].id.name);
+        console.log(this.attendanceList, "\n", this.attendanceList[0].date.substring(0, 10), "\t", this.attendanceList[0].id.name);
       })
   }
 
@@ -127,24 +128,52 @@ export class AttendanceComponent implements OnInit {
   }
 
   UpdateAttendance(EID, date) {
-    
+
     console.log(this.AID);
     this.ps.updateAttendance(this.AID, EID, date)
-    .then((res: any)=>{
-      this.modalService.dismissAll('save Close');
-      console.log("res.data",res.data);
-      res.data.name = this.employeeObjects.find((element)=>{
-        console.log(element._id);
-        return element._id === res.data.id;
+      .then((res: any) => {
+        this.modalService.dismissAll('save Close');
+        console.log("res.data", res.data);
+        res.data.name = this.employeeObjects.find((element) => {
+          console.log(element._id);
+          return element._id === res.data.id;
+        });
+        console.log("res.data.id", res.data.name);
+        this.attendanceList[this.index].id.name = res.data.name.name;
+        this.attendanceList[this.index].date = res.data.date.substring(0, 10);
+        //edit array
+      }).catch((err) => {
+        console.log(err);
       });
-      console.log("res.data.id",res.data.name);
-      this.attendanceList[this.index].id.name = res.data.name.name;
-      this.attendanceList[this.index].date = res.data.date.substring(0,10);
-      //edit array
-    }).catch((err)=>{
-      console.log(err);
-    });
   }
+
+  // onChange(){
+  //   var disabledDates = ["2019-04-08","2019-04-09","2019-04-07"];
+    // $(document).ready(function() {
+      // $("#date").datepicker({
+      //   beforeShowDay: function(date){
+      //     var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+      //     return [ disabledDates.indexOf(date) == -1 ]
+      // }
+      // });
+    // });
+  // }
+
+  // onChange(name: string) {
+  //   alert(name);
+  //   $(document).ready(function () {
+  //     $("#date").datepicker(function(){
+  //         $.fn.disableDate();
+  //     });
+  //     $.fn.disableDate = function(){
+  //       alert(here);
+  //       const attr = this.attendanceList.find((element) => {
+  //         return name === this.attendanceList.id._id;
+  //       });
+  //       console.log(attr);
+  //     }
+  //   });
+  // }
 
   ngOnInit() {
     this.getEmployee();

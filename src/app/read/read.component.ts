@@ -108,7 +108,7 @@ export class ReadComponent implements OnInit {
         this.employeeObjects.splice(index, 1);
       });
     }
-    console.log(this.employeeObjects.length);
+    // console.log(this.employeeObjects.length);
   }
 
   addToList(item) {

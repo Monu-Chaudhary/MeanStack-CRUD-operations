@@ -193,7 +193,9 @@ export class PersonService {
 
         },
         msg => { //error
-          this.toastr.errorToastr(JSON.parse(JSON.stringify(msg.error)).msg);
+          console.log(msg);
+          console.log("err msg",JSON.parse(JSON.stringify(msg)).message);
+          this.toastr.errorToastr("error occured");
           reject(msg);
         }
       ).catch(err =>{

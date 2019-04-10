@@ -9,6 +9,8 @@ let Employee = require('../models/Employee');
 let Department = require('../models/Department');
 let Attendance = require('../models/attendance');
 
+
+
 //defined store route
 employeeRoutes.route('/employee/add').post(function (req, res) {
     let employee = new Employee(req.body);
@@ -20,13 +22,13 @@ employeeRoutes.route('/employee/add').post(function (req, res) {
 
     req.checkBody('name', 'Name is required').notEmpty()
     // .isAlpha().withMessage('Name must be alphabetic only');
-    req.checkBody('name', 'Name must be atleast 3 char and maximum 20 char long').isLength({min: 3, max: 20});
-    req.checkBody('name', 'Name must only be alphabetic').isAlpha();   //not working
+    req.checkBody('name', 'Name must be atleast 3 char and maximum 20 char long').isLength({ min: 3, max: 20 });
+    req.checkBody('name', 'Name must only be alphabetic').isAlpha();
     req.checkBody('department', 'Department is required').notEmpty();
     req.checkBody('age', 'Age is required').notEmpty();
     req.checkBody('age', 'Must be a number').isNumeric();
     // req.checkBody('age', 'Must be between 18 and 60').isLength({lt: 61, gt: 17})
-    req.checkBody('age', 'Must be between 18 and 60').matches('^([2-5]\d|18|19|60)');  //not working
+    req.checkBody('age', 'Must be between 18 and 60').matches('^([2-5][0-9]|18|19|60)');
     req.checkBody('gender', 'Gender is required').notEmpty();
 
     var errors = req.validationErrors();
@@ -101,10 +103,10 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
     sort = {};
     $or = [];
 
-    if (req.query.sort === 'department'){
+    if (req.query.sort === 'department') {
         req.query.sort = 'department.name';
     }
-    console.log("ORDER \t", req.query.order);
+    // console.log("ORDER \t", req.query.order);
     if ((req.query.sort && req.query.sort == 'undefined') || !req.query.sort) {
         sort['unKnown'] = 1;
     }
@@ -163,7 +165,7 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
                 },
             },
             { "$unwind": "$department" },
-            { $project: {name: 1, department: 1, age: 1, gender:1, insensitive: { "$toLower": "$name"}}},
+            { $project: { name: 1, department: 1, age: 1, gender: 1, insensitive: { "$toLower": "$name" } } },
             { $sort: sort },
             { $skip: query.skip },
             { $limit: query.limit }
@@ -182,9 +184,9 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
                 { $project: { 'Count.count': 1 } }
             ]).exec((err, Count) => {
                 if (err) return res.json({ success: false, msg: err });;
-                console.log("EmployeeObjects", EmployeeObjects);
-                console.log("COUNT", Count);
-                if(Count[0].Count[0]) var count = Count[0].Count[0].count;
+                // console.log("EmployeeObjects", EmployeeObjects);
+                // console.log("COUNT", Count);
+                if (Count[0].Count[0]) var count = Count[0].Count[0].count;
                 else var count = 0;
                 let data = {
                     count: count,
@@ -253,7 +255,7 @@ employeeRoutes.route('/employee/edit/:id').get(function (req, res) {
 employeeRoutes.route('/employee/update/:id').post(function (req, res, next) {
     console.log(req.params, req.body);
     Employee.findById(req.params.id, function (err, employee) {
-        if (err) return res.status(400).json({success: false, msg: err});
+        if (err) return res.status(400).json({ success: false, msg: err });
 
         let name = req.body.name;
         let age = req.body.age;
@@ -284,7 +286,7 @@ employeeRoutes.route('/employee/update/:id').post(function (req, res, next) {
             employee.age = req.body.age;
             employee.gender = req.body.gender;
             console.log("age", employee.age, '\n employee', employee);
-            
+
             employee.save().then(employee => {
                 // find
                 res.status(200).json({ success: true, msg: 'Update complete', data: employee });
@@ -297,12 +299,24 @@ employeeRoutes.route('/employee/update/:id').post(function (req, res, next) {
 });
 
 //define delete| remove | destroy route
-employeeRoutes.route('/employee/delete/:id').get(function (req, res) {
+employeeRoutes.route('/employee/delete/:id').get(function (req, res, next) {
     Employee.findByIdAndRemove({ _id: req.params.id }, function (err, employee) {
-        if (err) res.status(500).json({ success: false, msg: 'Cannot remove item', data: employee });
+        if (err) return res.status(500).json({ success: false, msg: 'Cannot remove item', data: employee });
         console.log(employee);
-        if (!employee) res.status(404).json({ success: false, msg: "Employee doesn't exist" });
-        else res.status(200).json({ success: true, msg: 'Successfully removed', data: employee });
+        if (!employee) return res.status(404).json({ success: false, msg: "Employee doesn't exist" });
+        else {
+            console.log(req.params.id);
+            Attendance.updateMany(
+                { id: req.params.id },
+                {
+                    $currentDate:
+                        { deleted: true }
+                }).exec((err, res) => {
+                    if (err) return res.status(500).json({ success: false, msg: err });
+                    next(res);
+                })
+            return res.status(200).json({ success: true, msg: 'Successfully removed', data: employee });
+        }
     });
 });
 
@@ -316,27 +330,48 @@ employeeRoutes.route('/department').get(function (req, res) {
     })
 });
 
-employeeRoutes.route('/employee/attendance/:id').post(function(req, res){
+employeeRoutes.route('/employee/attendance/:id').post(function (req, res) {
 
     console.log("params", req.body);
-    let attendance = new Attendance(req.body);
-    console.log(attendance);
-    attendance.save()
-            .then(attendance => {
-                req.session.success = true;
-                res.status(200).json({ success: true, msg: 'Attendance is added successfully', data: attendance });
-                // res.status(200).send('Employee successfully added');
-                // res.redirect('/employee');
-            })
-            .catch(err => {
-                req.session.success = false;
-                req.session.error = err;
-                res.status(500).send({ success: false, msg: "unable to save to database" });
-            });
+    let date = req.body.date;
+    let id = req.body.id;
+    const schema = Joi.object().keys({
+        date: Joi.date().max('now').iso(),
+        id: Joi.string()
+    });
+
+    // const result = Joi.validate(req.body.date, schema);
+
+    Joi.validate({ id: id, date: date }, schema, (err, result) => {
+        if (err) {
+            console.log('msg', err, "\nohh");
+            return res.status(500).send({ success: false, msg: err });
+        }
+        else {
+            let attendance = new Attendance(req.body);
+            console.log('pass');
+            attendance.save()
+                .then(attendance => {
+                    req.session.success = true;
+                    res.status(200).json({ success: true, msg: 'Attendance is added successfully', data: attendance });
+                    // res.status(200).send('Employee successfully added');
+                    // res.redirect('/employee');
+                })
+                .catch(err => {
+                    req.session.success = false;
+                    req.session.error = err;
+                    console.log(err);
+                    res.status(500).send({ success: false, msg: "unable to save to database" });
+                });
+        }
+    })
+
+    // console.log(attendance);
+
 });
 
-employeeRoutes.route('/employee/attendance').get(function(req, res, next){
-    Attendance.find().populate('id').exec((err, attendanceList)=>{
+employeeRoutes.route('/employee/attendance').get(function (req, res, next) {
+    Attendance.find({ deleted: null }).populate('id').exec((err, attendanceList) => {
         if (err) return next(err);
         res.status(200).json(attendanceList);
     });
@@ -344,31 +379,50 @@ employeeRoutes.route('/employee/attendance').get(function(req, res, next){
 
 employeeRoutes.route('/employee/attendance/delete/:id').get(function (req, res) {
     Attendance.findByIdAndRemove({ _id: req.params.id }, function (err, attendance) {
-        if (err) res.status(500).json({ success: false, msg: 'Cannot remove item', data: attendance });
-        console.log(attendance);
+        if (err) res.status(500).json({ success: false, msg: err, data: attendance });
+        // console.log(attendance);
         if (!attendance) res.status(404).json({ success: false, msg: "Employee doesn't exist" });
         else res.status(200).json({ success: true, msg: 'Successfully removed', data: attendance });
     });
 });
 
-employeeRoutes.route('/employee/attendance/update/:id').post((req, res)=>{
-    Attendance.findById(req.params.id).exec((err, attendance)=>{
-        if (err) return res.status(400).json({success: false, msg: err});
+employeeRoutes.route('/employee/attendance/update/:id').post((req, res) => {
+    let date = req.body.date;
+    let id = req.body.id;
+    const schema = Joi.object().keys({
+        date: Joi.date(),
+        id: Joi.string()
+    });
 
-        if(!attendance) return res.status(400).json({success: false, msg: 'data not fount'});
-        else {
-            console.log(req.body);
-            attendance.id = req.body.id;
-            attendance.date = req.body.date;
-            // let attendance = new Attendance(req.body)
-            attendance.save().then(attendance =>{
-                console.log("updated");
-                res.status(200).json({success: true, msg: "data updated", data: attendance});
-            }).catch(err =>{
-                res.status(400).json({success: false, msg: err});
+    // const result = Joi.validate(req.body.date, schema);
+
+    Joi.validate({ id: id, date: date }, schema, (err, result) => {
+        if (err) {
+            console.log('msg', err, "\nohh");
+            return res.status(500).send({ success: false, msg: err });
+        }
+        else{
+            Attendance.findById(req.params.id).exec((err, attendance) => {
+                if (err) return res.status(400).json({ success: false, msg: err });
+        
+                if (!attendance) return res.status(400).json({ success: false, msg: 'data not fount' });
+                else {
+                    console.log(req.body);
+                    attendance.id = req.body.id;
+                    attendance.date = req.body.date;
+                    // let attendance = new Attendance(req.body)
+                    attendance.save().then(attendance => {
+                        console.log("updated");
+                        res.status(200).json({ success: true, msg: "data updated", data: attendance });
+                    }).catch(err => {
+                        res.status(400).json({ success: false, msg: err });
+                    });
+                }
             });
         }
     });
+    
+   
 });
 
 module.exports = employeeRoutes;
