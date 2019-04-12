@@ -49,8 +49,7 @@ export class PersonService {
     // console.log("ORDER", order);
 
     let promise = new Promise((resolve, reject) => {
-      let apiURL = `${this.uri}/employee${q}`;
-      // let pg = page;
+      let apiURL = `${this.uri}/employee?${q}`;
       this.http.get(apiURL
     //     , {
     //      params: new HttpParams({
@@ -99,7 +98,6 @@ export class PersonService {
     });
     return promise;
   }
-
 
   editEmployee(id) {
     //console.log("HERE");
@@ -207,9 +205,10 @@ export class PersonService {
     return promise;
   }
 
-  getAttendance(){
+  getAttendance(q?){
+    console.log(q);
     let promise = new Promise((resolve, reject) => {
-      let apiURL = `${this.uri}/employee/attendance`;
+      let apiURL = `${this.uri}/employee/attendance?${q}`;
       this.http.get(apiURL)
         .toPromise()
         .then(

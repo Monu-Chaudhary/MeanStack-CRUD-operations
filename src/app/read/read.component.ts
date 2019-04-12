@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PersonService } from '../person.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import {ToastrManager} from 'ng6-toastr-notifications';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-read',
@@ -15,7 +17,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ReadComponent implements OnInit {
 
   employeeObjects: any;
-  // employeeObjects: Observable<string[]>;
   page: number = 1;
   count: number = 0;
   loading: boolean;
@@ -25,9 +26,18 @@ export class ReadComponent implements OnInit {
   departments: Observable<string[]>;
   name: string = '';
   list: any;
-  // sortByName: string; 
-
   filterForm: FormGroup;
+  attendanceRec: any;
+  show: boolean;
+  EID: number;
+
+  constructor(private ps: PersonService, 
+    private router: Router, 
+    private fb: FormBuilder, 
+    private modalService: NgbModal, 
+    private flashMessage: FlashMessagesService) {
+    this.createForm();
+  }
 
   ngOnInit() {
     this.getPage(1);
@@ -58,7 +68,7 @@ export class ReadComponent implements OnInit {
   getPage(obj) {
     console.log("object", obj, " page:", obj.page, " sort:", obj.sort, " order", obj.order, " fname:", obj.fname, " drpdnDepartment: ", obj.drpdnDepartment, "fgender: ", obj.fgender)
 
-    var q = '?';
+    var q = '';
     if (obj.page) q = q + 'page=' + obj.page + '&';
     if (obj.order) q = q + 'order=' + obj.order + '&';
     if (obj.sort) q = q + 'sort=' + obj.sort + '&';
@@ -84,10 +94,6 @@ export class ReadComponent implements OnInit {
     }).catch((err) => {
       console.log(err);
     })
-  }
-
-  constructor(private ps: PersonService, private router: Router, private fb: FormBuilder) {
-    this.createForm();
   }
 
   createForm() {
@@ -135,6 +141,55 @@ export class ReadComponent implements OnInit {
     this.employeeObjects[item.i].department = item.departobject;
     this.employeeObjects[item.i].gender = item.updatedEmployee.gender;
     // console.log("LIST",this.employeeObjects);
+  }
+
+  open(content) {
+    console.log("show", this.show);
+    // console.log("attendancerecord",this.attendanceRec);
+    this.modalService.open(content, { ariaLabelledBy: 'attendance-title' })
+      .result
+      .then((result) => {
+        console.log('closed with', result);
+      }, (reason) => {
+        console.log('Dismissed', this.getDismissReason(reason));
+      });
+      if(!this.show) this.flashMessage.show("There is no attendance data for the employee", { cssClass: 'alert-danger' });      
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  showAttendance(content, EID) {
+    var q = '';
+    if (EID) q = q + 'EID=' + EID;
+    this.EID = EID;
+    this.ps.getAttendance(q).then((result) => {
+      console.log("RESULT", result);
+      if (result[0]) {
+        console.log("TYPE", (result[0].date));
+        this.attendanceRec = result;
+        this.show = true;
+        this.attendanceRec.forEach(element => {
+          element.date = element.date.toString().substring(0, 10);
+          var date = moment(element.date).format("dddd");
+          // console.log(date);
+          element.day = date;
+        });
+      }
+      else {
+        this.show = false;
+      }
+      this.open(content);
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
 }

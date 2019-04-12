@@ -19,10 +19,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AttendanceComponent } from './attendance/attendance.component';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule} from '@angular/material/input';
+import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
 
 @NgModule({
   declarations: [
@@ -45,12 +42,9 @@ import { MatInputModule} from '@angular/material/input';
     NgbModule.forRoot(),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    MatDatepickerModule, 
-    MatNativeDateModule,
-    MatFormFieldModule,
-    MatInputModule
+    FlashMessagesModule.forRoot()
   ],
-  providers: [PersonService, UserService, ReadComponent, NgbActiveModal],
+  providers: [PersonService, UserService, NgbActiveModal, FlashMessagesService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

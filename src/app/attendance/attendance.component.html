@@ -1,6 +1,6 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="attendance-title">Add Attendance</h4>
+    <h4 class="modal-title" id="attendance-title">Attendance</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -12,7 +12,7 @@
       <div class="form-group">
         <label class="col-md-4">Name</label>
         <!-- <input formControlName="Name" #Name> -->
-        <select id="Name" formControlName="name" #name (change)="onChange($event.target.value)">
+        <select id="Name" formControlName="name" #name>
           <option *ngFor="let employee of employeeObjects" [value]="employee._id" required>{{employee.name}}</option>
         </select>
       </div>
@@ -25,16 +25,15 @@
 
       <div class="form-group">
         <label class="col-md-4">attended date</label>
-        <input id="Date" type="date" [max]="maxDate" formControlName="date" #date>
+        <input id="Date" type="date" [max]="maxDate" formControlName="date" #date (input)="disableButton(name.value, date.value)">
       </div>
 
       <div >
-        <button *ngIf="option == 'add'" class="btn btn-outline-primary" (click)="addAttendance(name.value, date.value)" [disabled]="attendanceForm.invalid || attendanceForm.pristine">Submit</button>
-        <button *ngIf="option == 'edit'" class="btn btn-outline-primary" (click)="UpdateAttendance(name.value, date.value)" [disabled]="attendanceForm.invalid || attendanceForm.pristine">Edit</button>
+        <button *ngIf="option == 'add'" class="btn btn-outline-primary" (click)="addAttendance(name.value, date.value)" [disabled]="attendanceForm.invalid || attendanceForm.pristine || disable">Submit</button>
+        <button *ngIf="option == 'edit'" class="btn btn-outline-primary" (click)="UpdateAttendance(name.value, date.value)" [disabled]="attendanceForm.invalid || attendanceForm.pristine || disable">Edit</button>
       </div>
+      <flash-messages></flash-messages>
     </form>
-
-    
   </div>
 </ng-template>
 

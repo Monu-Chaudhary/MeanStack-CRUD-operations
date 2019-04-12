@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import * as $AB from 'jquery';
-// import {MatDatepickerModule} from '@angular/material/datepicker';
 // import * as moment from 'moment';
-
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { PersonService } from '../person.service';
-import { $ } from 'protractor';
+import { ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-attendance',
@@ -24,17 +22,22 @@ export class AttendanceComponent implements OnInit {
   option: string;
   AID: number;
   index: number;
-  // date= new Date();
+  disable: boolean;
+  EID: string;
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private ps: PersonService) {
-    // let now = moment(); 
-    // console.log(this.now);
+    private ps: PersonService,
+    private flashMessage: FlashMessagesService,
+    private activeRoute: ActivatedRoute) {
+      console.log(typeof(this.now));
     this.maxDate = this.now.toISOString().substring(0, 10);
     // console.log('hello world', this.now.toISOString().substring(0,10),"\n maxDate", this.maxDate)
     this.createForm();
+    this.EID = this.activeRoute.snapshot.queryParamMap.get('id');
+    console.log(this.EID);
+
   }
   createForm() {
     this.attendanceForm = this.fb.group({
@@ -105,7 +108,9 @@ export class AttendanceComponent implements OnInit {
   }
 
   getAttendance() {
-    this.ps.getAttendance()
+    var q='';
+    if (this.EID) q="EID="+this.EID;
+    this.ps.getAttendance(q)
       .then((res) => {
         this.attendanceList = res;
         this.attendanceList.forEach(attendance => {
@@ -147,33 +152,20 @@ export class AttendanceComponent implements OnInit {
       });
   }
 
-  // onChange(){
-  //   var disabledDates = ["2019-04-08","2019-04-09","2019-04-07"];
-    // $(document).ready(function() {
-      // $("#date").datepicker({
-      //   beforeShowDay: function(date){
-      //     var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
-      //     return [ disabledDates.indexOf(date) == -1 ]
-      // }
-      // });
-    // });
-  // }
-
-  // onChange(name: string) {
-  //   alert(name);
-  //   $(document).ready(function () {
-  //     $("#date").datepicker(function(){
-  //         $.fn.disableDate();
-  //     });
-  //     $.fn.disableDate = function(){
-  //       alert(here);
-  //       const attr = this.attendanceList.find((element) => {
-  //         return name === this.attendanceList.id._id;
-  //       });
-  //       console.log(attr);
-  //     }
-  //   });
-  // }
+  disableButton(name, date) {
+    var loop = true;
+    this.attendanceList.forEach(element => {
+      if (name === element.id._id && loop) {
+        if (date === element.date) {
+          this.disable = true;
+          this.flashMessage.show("The employee already has an attendance on the date"+ date,{cssClass: 'alert-danger'});
+          return loop=false;
+        }
+      }
+      if(loop) this.disable = false;
+    });
+    console.log(this.disable);
+  }
 
   ngOnInit() {
     this.getEmployee();

@@ -371,7 +371,12 @@ employeeRoutes.route('/employee/attendance/:id').post(function (req, res) {
 });
 
 employeeRoutes.route('/employee/attendance').get(function (req, res, next) {
-    Attendance.find({ deleted: null }).populate('id').exec((err, attendanceList) => {
+    console.log("params", req.query.EID);
+    var query = {};
+    query.$and = [{deleted: null}]
+    if(req.query.EID) query.$and.push({id: req.query.EID});
+    console.log(query);
+    Attendance.find(query).populate('id').exec((err, attendanceList) => {
         if (err) return next(err);
         res.status(200).json(attendanceList);
     });
