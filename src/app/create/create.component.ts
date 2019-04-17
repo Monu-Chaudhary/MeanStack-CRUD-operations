@@ -33,7 +33,7 @@ export class CreateComponent implements OnInit {
 
   open(content){
     this.ps.getDepartment().then((result)=>{
-      this.departments = result['departments']
+      this.departments = result['data']['departments']
     })
     // console.log('department',this.dpt);
     this.modalService.open(content, {ariaLabelledBy: 'add-employee-title'}).result.then((result)=>{

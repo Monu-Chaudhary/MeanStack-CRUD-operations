@@ -20,6 +20,8 @@ employeeRoutes.route('/employee/add').post(function (req, res) {
     let gender = req.body.gender;
     let department = req.body.department;
 
+    //TODO:: validate the department with the database... to check whether the department is in the database.
+
     req.checkBody('name', 'Name is required').notEmpty()
     // .isAlpha().withMessage('Name must be alphabetic only');
     req.checkBody('name', 'Name must be atleast 3 char and maximum 20 char long').isLength({ min: 3, max: 20 });
@@ -30,6 +32,7 @@ employeeRoutes.route('/employee/add').post(function (req, res) {
     // req.checkBody('age', 'Must be between 18 and 60').isLength({lt: 61, gt: 17})
     req.checkBody('age', 'Must be between 18 and 60').matches('^([2-5][0-9]|18|19|60)');
     req.checkBody('gender', 'Gender is required').notEmpty();
+    // req.checkBody('gender', 'invalid gender').matches('Male| Female| Other');
 
     var errors = req.validationErrors();
     var message = [];
@@ -193,7 +196,8 @@ employeeRoutes.route('/employee').get(function (req, res, next) {
                     data: EmployeeObjects,
                     page: page
                 };
-                res.json(data);
+                // res.sendStatus(200);
+                res.status(200).json(data);
             })
         }
     });
@@ -302,10 +306,10 @@ employeeRoutes.route('/employee/update/:id').post(function (req, res, next) {
 employeeRoutes.route('/employee/delete/:id').get(function (req, res, next) {
     Employee.findByIdAndRemove({ _id: req.params.id }, function (err, employee) {
         if (err) return res.status(500).json({ success: false, msg: 'Cannot remove item', data: employee });
-        console.log(employee);
+        // console.log(employee);
         if (!employee) return res.status(404).json({ success: false, msg: "Employee doesn't exist" });
         else {
-            console.log(req.params.id);
+            // console.log(req.params.id);
             Attendance.updateMany(
                 { id: req.params.id },
                 {
@@ -326,13 +330,13 @@ employeeRoutes.route('/department').get(function (req, res) {
         let data = {
             departments: departments
         }
-        res.json(data);
+        res.json({success: true, data: data});
     })
 });
 
 employeeRoutes.route('/employee/attendance/:id').post(function (req, res) {
 
-    console.log("params", req.body);
+    // console.log("params", req.body);
     let date = req.body.date;
     let id = req.body.id;
     const schema = Joi.object().keys({
@@ -349,7 +353,7 @@ employeeRoutes.route('/employee/attendance/:id').post(function (req, res) {
         }
         else {
             let attendance = new Attendance(req.body);
-            console.log('pass');
+            // console.log('pass');
             attendance.save()
                 .then(attendance => {
                     req.session.success = true;
@@ -375,10 +379,9 @@ employeeRoutes.route('/employee/attendance').get(function (req, res, next) {
     var query = {};
     query.$and = [{deleted: null}]
     if(req.query.EID) query.$and.push({id: req.query.EID});
-    console.log(query);
     Attendance.find(query).populate('id').exec((err, attendanceList) => {
         if (err) return next(err);
-        res.status(200).json(attendanceList);
+        res.status(200).json({success: true, data: attendanceList});
     });
 });
 

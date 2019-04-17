@@ -12,6 +12,6 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 
   // export const url = {
-  //   uri :'http://localhost:4000'
+  //   uri :'http://localhost:3000'
   // }
 

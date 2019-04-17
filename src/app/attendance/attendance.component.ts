@@ -112,11 +112,14 @@ export class AttendanceComponent implements OnInit {
     if (this.EID) q="EID="+this.EID;
     this.ps.getAttendance(q)
       .then((res) => {
-        this.attendanceList = res;
-        this.attendanceList.forEach(attendance => {
-          attendance.date = attendance.date.substring(0, 10);
-        });
+        console.log(res['data'])
+        this.attendanceList = res['data'];
+        if(this.attendanceList.length > 0){
+          this.attendanceList.forEach(attendance => {
+            attendance.date = attendance.date.substring(0, 10);
+          });
         console.log(this.attendanceList, "\n", this.attendanceList[0].date.substring(0, 10), "\t", this.attendanceList[0].id.name);
+        }
       })
   }
 

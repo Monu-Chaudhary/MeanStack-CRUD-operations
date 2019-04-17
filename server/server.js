@@ -1,12 +1,12 @@
 const express = require('express'),
-  path = require('path'),
+  // path = require('path'),
   bodyParser = require('body-parser'),
   cors = require('cors'),
   mongoose = require('mongoose'),
-  config = require('./DB'),
+  config = require('./config/index'),
   passport = require('passport'),
-  errorHandler = require('./_helpers/error-handler'),
-  flash = require('connect-flash'),
+  // errorHandler = require('./_helpers/error-handler'),
+  // flash = require('connect-flash'),
   session = require('express-session'),
   expressValidator = require('express-validator')
   Joi = require('joi');
@@ -15,7 +15,7 @@ const employeeRoutes = require('./routes/employee.route');
 const userRoutes = require('./routes/user.route');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
+mongoose.connect(config.db, { useNewUrlParser: true }).then(
   () => { console.log('Employee Database is connected') },
   err => { console.log('cannot connect to employee database' + err) }
 );
@@ -61,9 +61,11 @@ require('./_helpers/passport.js')(passport);
 
 app.use('/user', userRoutes);
 app.use('/', employeeRoutes);
-const port = process.env.PORT || 4000;
+// console.log("env port", config.port);
+// const port = config.port || 4000;
 
-const server = app.listen(port, function () {
-  console.log('listening on port ' + port);
+const server = app.listen(config.port, function () {
+  console.log('listening on port ' + config.port);
 });
 
+module.exports = app;

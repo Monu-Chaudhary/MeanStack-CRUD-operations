@@ -9,7 +9,7 @@ import {ToastrManager} from 'ng6-toastr-notifications';
 export class PersonService {
 
   // uri = url.uri;
-  uri = 'http://localhost:4000';
+  uri = 'http://localhost:3000';
 
   constructor(private http: HttpClient, public toastr: ToastrManager ) { }
 

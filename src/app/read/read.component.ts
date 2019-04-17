@@ -89,7 +89,9 @@ export class ReadComponent implements OnInit {
 
   getDepartment() {
     this.ps.getDepartment().then((result) => {
-      this.departments = result['departments'];
+      console.log(result);
+      this.departments = result['data']['departments'];
+      // ['departments'];
       console.log('dept', this.departments, '\t', result);
     }).catch((err) => {
       console.log(err);
@@ -171,10 +173,10 @@ export class ReadComponent implements OnInit {
     if (EID) q = q + 'EID=' + EID;
     this.EID = EID;
     this.ps.getAttendance(q).then((result) => {
-      console.log("RESULT", result);
-      if (result[0]) {
-        console.log("TYPE", (result[0].date));
-        this.attendanceRec = result;
+      console.log("RESULT", result['data']);
+      if (result['data'][0]) {
+        console.log("TYPE", (result['data'][0].date));
+        this.attendanceRec = result['data'];
         this.show = true;
         this.attendanceRec.forEach(element => {
           element.date = element.date.toString().substring(0, 10);

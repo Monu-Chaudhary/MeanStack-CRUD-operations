@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class UserService {
 
-  uri = 'http://localhost:4000/user';
+  uri = 'http://localhost:3000/user';
 
   private loggedIn = new BehaviorSubject<boolean>(false);
 
