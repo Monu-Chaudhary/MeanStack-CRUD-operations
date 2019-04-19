@@ -45,7 +45,7 @@ export class UpdateComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.ps.editEmployee(this.updateMessage).then(res => {
-        this.employee = res;
+        this.employee = res['data'];
         // console.log(res);
       });
     });

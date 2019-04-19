@@ -21,7 +21,7 @@ var server = supertest.agent(app);
 describe('EMPLOYEE TESTER', () => {
     var employee = {
         name: "Monu",
-        age: 22,
+        age: '22',
         department: "5c99c53b5239d6f1d8245f3b",
         gender: "Female"
     }
@@ -37,6 +37,7 @@ describe('EMPLOYEE TESTER', () => {
             .post('/employee/add')
             .send(employee)
             .end((err, res) => {
+                if (err) throw err;
                 res.body.should.be.a('object');
                 expect(res.body).to.have.property('success').eq(true);
                 expect(res.body).to.have.property('data').to.not.be.empty;
@@ -58,6 +59,21 @@ describe('EMPLOYEE TESTER', () => {
                 done();
             });
     });
+
+    it('edit employee', (done)=>{
+        let employee = new Employee({ name: 'Yogesh', age: 23, document: '5c99c53b5239d6f1d8245f3b', gender: 'Male'});
+        employee.save((err, employee)=>{
+            server
+            .get('/employee/edit/'+ employee._id)
+            .end((err, res)=>{
+                res.body.should.be.a('object');
+                expect(res.body).to.have.property('data');
+                expect(res.body).to.have.property('success').to.eq(true);
+                res.status.should.be.eq(200);
+                done();
+            })
+        })
+    })
 
     it('update employee', (done)=>{
         let employee = new Employee({name: 'Yogesh', age: 21, department: '5c99c53b5239d6f1d8245f3b', gender: 'Male'});
@@ -199,4 +215,5 @@ describe('TEST EMPLOYEE ATTENDANCE', ()=>{
     })
         })
     })
+
 });

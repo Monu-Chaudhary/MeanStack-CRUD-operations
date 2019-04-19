@@ -32,7 +32,10 @@ employeeRoutes.route('/employee/add').post(function (req, res) {
     // req.checkBody('age', 'Must be between 18 and 60').isLength({lt: 61, gt: 17})
     req.checkBody('age', 'Must be between 18 and 60').matches('^([2-5][0-9]|18|19|60)');
     req.checkBody('gender', 'Gender is required').notEmpty();
-    // req.checkBody('gender', 'invalid gender').matches('Male| Female| Other');
+    req.checkBody('gender', 'invalid gender').matches('Male|| Female|| Other');
+    console.log(department);
+    if(!mongoose.Types.ObjectId.isValid(department)) throw new error('invalid department');
+
 
     var errors = req.validationErrors();
     var message = [];
@@ -251,7 +254,7 @@ employeeRoutes.route('/employee/edit/:id').get(function (req, res) {
     Employee.findOne({ _id: ID }).populate('department').exec(function (err, employee) {
         if (err) res.send(err);
         // console.log("eMPLOYEE",employee);
-        res.status(200).json(employee);
+        res.status(200).json({success: true, data: employee});
     });
 });
 
